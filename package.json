@@ -1,0 +1,28 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "y",
+  "homepage": "https://github.com/angelfarias867-wq/ControlPass#readme",
+  "bugs": {
+    "url": "https://github.com/angelfarias867-wq/ControlPass/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelfarias867-wq/ControlPass.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mogoose": "^0.0.1-security",
+    "mongoose": "^9.8.1",
+    "nodemon": "^3.1.14"
+  }
+}

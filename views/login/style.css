@@ -1,0 +1,254 @@
+/* ==========================================
+   VARIABLES DE COLOR (WhatsApp Dark)
+   ========================================== */
+:root {
+  --bg-main: #111b21;       /* Fondo oscuro principal */
+  --bg-card: #1f2c34;       /* Fondo de la tarjeta de login (un poco más claro) */
+  --bg-input: #2a3942;      /* Fondo de los inputs */
+  --green-wa: #00a884;      /* Verde principal WhatsApp */
+  --green-hover: #008f6f;   /* Verde hover */
+  --text-primary: #e9edef;  /* Texto principal */
+  --text-secondary: #8696a0;/* Texto secundario y etiquetas */
+  --border-input: #374045;   /* Borde sutil para inputs */
+}
+
+/* Reset y Estilos Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+   HEADER / NAVBAR
+   ========================================== */
+.navbar {
+  height: 80px; /* Altura similar a la referencia */
+  display: flex;
+  align-items: center;
+  padding: 0 4rem; /* Más espacio lateral */
+}
+
+.navbar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;          /* Asegura que sea negrita */
+  color: var(--green-wa);    /* O usa directamente #00a884 */
+  text-transform: uppercase; /* Si prefieres mantenerlo en mayúsculas */
+  letter-spacing: 0.5px;
+}
+
+.btn-register {
+  background-color: var(--green-wa); /* Botón verde sólido */
+  color: #111b21;
+  text-decoration: none;
+  padding: 0.7rem 2rem;
+  border-radius: 8px; /* Bordes menos redondeados */
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+  background-color: var(--green-hover);
+}
+
+/* ==========================================
+   LAYOUT PRINCIPAL (Dos Columnas)
+   ========================================== */
+.main-layout {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 4rem;
+  max-width: 1400px; /* Ancho máximo mayor para simular la referencia */
+  margin: 0 auto;
+  width: 100%;
+  gap: 4rem; /* Espacio entre columnas */
+}
+
+/* ==========================================
+   COLUMNA IZQUIERDA: ILUSTRACIÓN
+   ========================================== */
+.illustration-column {
+  flex: 1.2; /* Toma un poco más de espacio */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Imagen real (si la tuvieras) */
+.main-img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Placeholder del logo (estilo boceto original pero con tamaños ajustados) */
+.logo-placeholder {
+  width: 100%;
+  max-width: 500px; /* Más ancho para equilibrar el layout */
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  /* Sin bordes ni fondo para que parezca flotar como la ilustración */
+}
+
+.logo-icon {
+  color: var(--green-wa);
+  opacity: 0.8;
+}
+
+.logo-placeholder h2 {
+  color: var(--text-secondary);
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+/* ==========================================
+   COLUMNA DERECHA: FORMULARIO
+   ========================================== */
+.form-column {
+  flex: 1; /* Toma un espacio estándar */
+  display: flex;
+  justify-content: center;
+}
+
+.login-card {
+  background-color: var(--bg-card);
+  border-radius: 12px; /* Bordes ligeramente redondeados */
+  padding: 3.5rem 3rem; /* Padding generoso como en la referencia */
+  width: 100%;
+  max-width: 480px; /* Ancho de la tarjeta similar a la referencia */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.login-card h3 {
+  font-size: 1.8rem; /* Título grande */
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin-bottom: 2.5rem; /* Espacio antes del form */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem; /* Más espacio entre campos */
+}
+
+/* Estilos de etiquetas de los inputs (Mayúsculas y color gris) */
+.input-group label {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem 1.2rem; /* Inputs más altos */
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.input-group input::placeholder {
+  color: #54656f; /* Placeholder más oscuro */
+}
+
+.input-group input:focus {
+  border-color: var(--green-wa);
+  background-color: #32444f; /* Ligero cambio de fondo al enfocar */
+}
+
+/* Botón Iniciar Sesión ancho y verde */
+.btn-submit {
+  margin-top: 1.5rem;
+  background-color: var(--green-wa);
+  color: #111b21;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px; /* Bordes menos redondeados */
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%; /* Ocupa todo el ancho */
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-submit:hover {
+  background-color: var(--green-hover);
+}
+
+.btn-submit:active {
+  transform: scale(0.99);
+}
+
+/* ==========================================
+   RESPONSIVE (Móviles y Tablets)
+   ========================================== */
+@media (max-width: 1024px) {
+  .main-layout {
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 1.5rem;
+    height: 70px;
+  }
+
+  .main-layout {
+    flex-direction: column; /* Apilar en vertical */
+    padding: 1.5rem 1rem;
+    gap: 3rem;
+  }
+
+  .logo-placeholder {
+    height: 250px;
+    max-width: 300px;
+  }
+  
+  .logo-placeholder svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .login-card {
+    padding: 2.5rem 1.5rem;
+  }
+}
