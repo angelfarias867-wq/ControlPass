@@ -26,5 +26,4 @@ app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
 
 
-
 module.exports = app;
