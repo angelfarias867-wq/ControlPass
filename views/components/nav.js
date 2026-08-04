@@ -18,7 +18,7 @@ const createNavSignup = () => {
                                   
         <!-- Versión Escritorio (se quitó la barra final) -->
         <div class="wa-desktop-menu">
-          <a href="/login" class="wa-btn">Iniciar Sesión</a>
+          <a href="/" class="wa-btn">Iniciar Sesión</a>
         </div>
       </div>
     `;
