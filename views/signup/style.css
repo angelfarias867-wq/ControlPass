@@ -1,0 +1,282 @@
+/* RESET & BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.login-page, body {
+  background-color: #111b21; /* WhatsApp Dark Mode */
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #e9edef;
+}
+
+::selection {
+  background-color: #00a884;
+  color: #ffffff;
+}
+
+/* NAVBAR BASE */
+.wa-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(32, 44, 51, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #222d34;
+  height: 4.5rem; /* Ligeramente más alta para dar espacio al logo grande */
+  z-index: 40;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* NAVBAR COMPONENTS & LAYOUT */
+.wa-nav-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wa-logo-wrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow: visible; /* Permite destacar el logo */
+}
+
+/* Permitimos que el logo de login use su altura personalizada de nav.js */
+.wa-logo-wrapper img.login-logo-large {
+  max-height: none;
+  transform: scale(1.1); /* Efecto extra de amplitud */
+  transform-origin: left center;
+}
+
+/* ÍCONO DEL MENÚ (SVG HAMBURGUESA) */
+.wa-menu-icon {
+  width: 2rem;
+  height: 2rem;
+  color: #e9edef;
+  cursor: pointer;
+  display: none;
+}
+
+/* DESKTOP MENU & BUTTON */
+.wa-desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  background-color: #00a884;
+  color: #111b21;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.wa-btn:hover {
+  background-color: #029071;
+}
+
+/* MOBILE MENU */
+.wa-mobile-menu {
+  position: absolute;
+  top: 4.5rem;
+  left: 0;
+  right: 0;
+  background-color: #202c33;
+  padding: 1rem;
+  border-bottom: 1px solid #222d34;
+}
+
+.wa-mobile-menu.hidden {
+  display: none;
+}
+
+.wa-mobile-menu.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.wa-btn-mobile {
+  width: 100%;
+  text-align: center;
+}
+
+/* NOTIFICATIONS CONTAINER */
+.notification-container {
+  position: fixed;
+  top: 5.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 28rem;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* MAIN LAYOUT */
+.login-container, .signup-container {
+  padding-top: 4.5rem;
+  min-height: 100vh;
+  display: flex;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* FORM WRAPPER & CARD */
+.login-form-wrapper, .signup-form-wrapper {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.login-card, .signup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background-color: #202c33;
+  border: 1px solid #222d34;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+/* FORM HEADER */
+.form-header {
+  margin-bottom: 0.25rem;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #e9edef;
+}
+
+.form-subtitle {
+  font-size: 0.875rem;
+  color: #8696a0;
+  margin-top: 0.25rem;
+}
+
+/* FORM ELEMENTS */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #d1d7db;
+  text-transform: uppercase;
+}
+
+.required-asterisk {
+  color: #00a884;
+}
+
+.form-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #222d34;
+  background-color: #111b21;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #e9edef;
+  transition: all 0.2s ease;
+}
+
+.form-input::placeholder {
+  color: #667781;
+}
+
+.form-input:focus {
+  border-color: #00a884;
+  box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.15);
+  outline: none;
+}
+
+/* BUTTON */
+.submit-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  background-color: #00a884;
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #111b21;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.025em;
+  transition: all 0.2s ease-in-out;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background-color: #029071;
+}
+
+.submit-btn:active:not(:disabled) {
+  background-color: #027eb5;
+}
+
+.submit-btn:disabled {
+  opacity: 0.3;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* CONTROL DE DIMENSIONES GLOBALES */
+img {
+  max-width: 100%;
+}
+
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* DYNAMIC NOTIFICATION OUTLINES */
+.outline-green-700 { outline: 2px solid #00a884; }
+.outline-red-700 { outline: 2px solid #ea4335; }
+.outline-indigo-700 { outline: 2px solid #027eb5; }
+.outline-purple-700 { outline: 2px solid #a855f7; }
+
+/* MEDIA QUERIES */
+@media (max-width: 768px) {
+  .wa-menu-icon {
+    display: block;
+  }
+
+  .wa-desktop-menu {
+    display: none;
+  }
+}

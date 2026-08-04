@@ -1,65 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ControlPass - Iniciar Sesión</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Fuente Roboto para el estilo WhatsApp -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Login</title>
+  </head>
 
-  <!-- Barra de navegación (Navbar) -->
-  <header class="navbar">
-    <div class="navbar-content">
-      <span class="app-name">ControlPass</span>
-      <a href="#" class="btn-register">Registro</a>
-    </div>
-  </header>
+  <body class="page-body">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar-header"></nav>
 
-  <!-- Contenedor Principal (Layout de dos columnas) -->
-  <main class="main-layout">
-    
-    <!-- Columna Izquierda: Ilustración/Logo -->
-    <section class="illustration-column">
-      <!-- Aquí puedes poner la imagen de tu ilustración -->
-      <!-- <img src="tu-ilustracion.svg" alt="Ilustración ControlPass" class="main-img"> -->
-      
-      <!-- Placeholder estilizado para simular el logo/ilustración del boceto -->
-      <div class="logo-placeholder">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" width="80" height="80" fill="currentColor">
-            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-          </svg>
-        </div>
-        <h2>Logo de la app</h2>
-      </div>
-    </section>
+    <!-- Contenedor de notificaciones -->
+    <div id="notification" class="notification-container"></div>
 
-    <!-- Columna Derecha: Formulario de Login -->
-    <section class="form-column">
-      <div class="login-card">
-        <h3>Bienvenido de nuevo</h3>
-        <p class="subtitle">Ingresa tus credenciales para acceder.</p>
-        
-        <form action="#" method="POST" class="login-form">
-          <div class="input-group">
-            <label for="usuario">CORREO ELECTRÓNICO *</label>
-            <input type="text" id="usuario" name="usuario" placeholder="ejemplo@correo.com" required autocomplete="off">
+    <!-- Contenedor Principal -->
+    <div class="main-wrapper">
+  
+      <!-- Formulario Estilizado -->
+      <div class="form-wrapper">
+        <form id="form" class="login-form">
+          <!-- Encabezado -->
+          <div class="form-header">
+            <h1 class="form-title">Bienvenido de nuevo</h1>
+            <p class="form-subtitle">Ingresa tus credenciales para acceder.</p>
           </div>
 
+          <!-- Correo -->
           <div class="input-group">
-            <label for="contrasena">CONTRASEÑA *</label>
-            <input type="password" id="contrasena" name="contrasena" placeholder="********" required>
+            <label for="email-input" class="input-label">
+              Correo electrónico
+              <span class="required-star">*</span>
+            </label>
+            <input
+              type="email"
+              id="email-input"
+              name="email-input"
+              autocomplete="email"
+              placeholder="ejemplo@correo.com"
+              class="form-input"
+            />
+            <p class="input-error-msg"></p>
           </div>
 
-          <button type="submit" class="btn-submit">Iniciar Sesión</button>
+          <!-- Contraseña -->
+          <div class="input-group">
+            <label for="password-input" class="input-label">
+              Contraseña
+              <span class="required-star">*</span>
+            </label>
+            <input
+              type="password"
+              id="password-input"
+              name="password-input"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="form-input"
+            />
+            <p class="input-error-msg"></p>
+          </div>
+
+          <!-- Botón de Iniciar Sesión -->
+          <button id="form-btn" class="submit-btn">
+            Iniciar Sesión
+          </button>
         </form>
       </div>
-    </section>
+    </div>
 
-  </main>
+    <!-- Clases dinámicas utilitarias (para estados/errores desde JS si los aplicas) -->
+    <div class="hidden-utilities hidden outline-green outline-red outline-indigo outline-purple"></div>
 
-</body>
+    <script src="index.js"></script>
+    <script src="../components/nav.js"></script>
+  </body>
 </html>

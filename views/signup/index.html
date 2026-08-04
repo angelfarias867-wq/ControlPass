@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - ControlPass</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body class="signup-page">
+  
+    <nav id="navbar" class="wa-navbar"></nav>
+
+    <div id="notification" class="notification-container"></div>
+
+    <main class="signup-container">
+      <div class="signup-form-wrapper">
+        <form id="form" class="signup-card">
+          <div class="form-header">
+            <h1 class="form-title">
+              Crea tu cuenta
+            </h1>
+            <p class="form-subtitle">Completa los datos para comenzar tu experiencia.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="email-input" class="form-label">
+              Correo electrónico
+              <span class="required-asterisk">*</span>
+            </label>
+            <input
+              type="email"
+              id="email-input"
+              name="email-input"
+              autocomplete="email"
+              placeholder="ejemplo@correo.com"
+              class="form-input"
+            />
+          </div>
+
+          <button
+            id="form-btn"
+            disabled
+            class="submit-btn"
+          >
+            Confirma El correo
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <script type="module" src="index.js"></script>
+    <script type="module" src="/components/notification.js"></script>
+    <script src="/components/nav.js"></script>
+  </body>
+</html>
