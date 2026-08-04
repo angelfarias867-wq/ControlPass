@@ -13,7 +13,7 @@ const createNavSignup = () => {
         </svg>
 
         <div class="wa-mobile-menu hidden">
-          <a href="/login" class="wa-btn wa-btn-mobile">Iniciar Sesión</a>
+          <a href="/login" class="wa-btn">Iniciar Sesión</a>
         </div>
                                   
         <!-- Versión Escritorio (se quitó la barra final) -->
