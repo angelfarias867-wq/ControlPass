@@ -27,6 +27,7 @@ app.use(express.json())
 
 //Rutas Frontend
 app.use("/", express.static(path.resolve("views", "login")));
+app.use("/", express.static(path.resolve("views", "login")));
 app.use('/signup', express.static(path.resolve('views','signup')));
 app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
