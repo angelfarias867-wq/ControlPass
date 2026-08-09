@@ -1,214 +1,210 @@
-/* RESET & BASE */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* --- Variables de Color de WhatsApp Dark Mode --- */
+:root {
+  --wa-bg-dark: #111b21;         /* Fondo principal de WhatsApp Dark */
+  --wa-card-bg: #202c33;        /* Fondo de paneles / chats */
+  --wa-input-bg: #111b21;       /* Fondo de inputs / barra de escribir */
+  --wa-green: #00a884;          /* Verde principal de WhatsApp */
+  --wa-green-hover: #008069;    /* Verde oscuro para hover */
+  --wa-green-light: #25d366;    /* Verde brillante para acentos */
+  --wa-text-primary: #e9edef;   /* Texto principal claro */
+  --wa-text-secondary: #8696a0; /* Texto secundario / hints */
+  --wa-border: #222d34;         /* Bordes de división */
+  --wa-error: #f15c6d;          /* Rojo de errores */
 }
 
-body.login-page, body {
-  background-color: #111b21; /* WhatsApp Dark Mode */
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  color: #e9edef;
+/* --- Resets y Base --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 ::selection {
-  background-color: #00a884;
-  color: #ffffff;
+  background-color: var(--wa-green);
+  color: #111b21;
 }
 
-/* NAVBAR BASE */
-.wa-navbar {
+body {
+  background-color: var(--wa-bg-dark);
+  color: var(--wa-text-primary);
+  min-height: 100vh;
+  font-family: Segoe UI, Helvetica Neue, Helvetica, Lucida Grande, Arial, Ubuntu, Cantarell, Fira Sans, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* --- Navbar Fijo --- */
+#navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background-color: rgba(32, 44, 51, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #222d34;
-  height: 4.5rem; /* Ligeramente más alta para dar espacio al logo grande */
+  height: 3.75rem;
   z-index: 40;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  background-color: var(--wa-card-bg);
+  border-bottom: 1px solid var(--wa-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+/* ==========================================
+   NAVBAR (Estilo ControlPass / Dark Theme)
+   ========================================== */
+
+/* Contenedor principal del navbar */
+#navbar {
+  width: 100%;
+  background-color: #111b21; /* Mismo fondo oscuro de la app */
 }
 
-/* NAVBAR COMPONENTS & LAYOUT */
 .wa-nav-container {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 1rem 2.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.wa-logo-wrapper {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  overflow: visible; /* Permite destacar el logo */
+/* Ajuste del logo */
+.wa-logo-wrapper img {
+  height: 42px !important; /* Tamaño proporcional como en la imagen */
+  width: auto;
+  display: block;
 }
 
-/* Permitimos que el logo de login use su altura personalizada de nav.js */
-.wa-logo-wrapper img.login-logo-large {
-  max-height: none;
-  transform: scale(1.1); /* Efecto extra de amplitud */
-  transform-origin: left center;
-}
-
-/* ÍCONO DEL MENÚ (SVG HAMBURGUESA) */
-.wa-menu-icon {
-  width: 2rem;
-  height: 2rem;
-  color: #e9edef;
-  cursor: pointer;
-  display: none;
-}
-
-/* DESKTOP MENU & BUTTON */
-.wa-desktop-menu {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
+/* Botón con relleno verde sólido y texto oscuro */
 .wa-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.5rem;
-  background-color: #00a884;
-  color: #111b21;
-  font-size: 0.875rem;
-  font-weight: 600;
+  background-color: #00a884; /* Verde WhatsApp / ControlPass */
+  color: #0b141a;            /* Texto oscuro dentro del botón verde */
   text-decoration: none;
-  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  display: inline-block;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .wa-btn:hover {
-  background-color: #029071;
+  background-color: #008f6f; /* Verde ligeramente más oscuro al pasar el cursor */
 }
 
-/* MOBILE MENU */
-.wa-mobile-menu {
-  position: absolute;
-  top: 4.5rem;
-  left: 0;
-  right: 0;
-  background-color: #202c33;
-  padding: 1rem;
-  border-bottom: 1px solid #222d34;
+/* Utilidades para dispositivos móviles/escritorio */
+.hidden {
+  display: none !important;
 }
 
-.wa-mobile-menu.hidden {
+.wa-menu-icon {
+  width: 28px;
+  height: 28px;
+  color: #e9edef;
+  cursor: pointer;
+  display: block;
+}
+
+.wa-desktop-menu {
   display: none;
 }
 
-.wa-mobile-menu.flex {
-  display: flex;
-  flex-direction: column;
-}
-
-.wa-btn-mobile {
-  width: 100%;
-  text-align: center;
-}
-
-/* NOTIFICATIONS CONTAINER */
-.notification-container {
+#notification {
   position: fixed;
-  top: 5.5rem;
+  top: 4.5rem;
   right: 1.5rem;
   z-index: 50;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-width: 28rem;
+  max-width: 24rem;
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 0 1rem;
 }
 
-/* MAIN LAYOUT */
-.login-container, .signup-container {
-  padding-top: 4.5rem;
+/* --- Contenedor Principal --- */
+.main-container {
+  position: relative;
+  z-index: 10;
+  padding-top: 5rem;
+  padding-bottom: 3rem;
   min-height: 100vh;
   display: flex;
-  max-width: 80rem;
-  margin-left: auto;
-  margin-right: auto;
   justify-content: center;
   align-items: center;
   padding-left: 1rem;
   padding-right: 1rem;
 }
 
-/* FORM WRAPPER & CARD */
-.login-form-wrapper, .signup-form-wrapper {
+/* --- Tarjeta del Formulario --- */
+.form-wrapper {
   width: 100%;
-  max-width: 28rem;
-  margin: 0 auto;
+  max-width: 26rem;
 }
 
-.login-card, .signup-card {
+#form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  background-color: #202c33;
-  border: 1px solid #222d34;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+  background-color: var(--wa-card-bg);
+  border: 1px solid var(--wa-border);
+  padding: 2.25rem 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 17px 50px 0 rgba(11, 20, 26, 0.5), 0 12px 15px 0 rgba(11, 20, 26, 0.2);
 }
 
-/* FORM HEADER */
+/* --- Encabezado --- */
 .form-header {
-  margin-bottom: 0.25rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.brand-icon {
+  color: var(--wa-green);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.75rem;
 }
 
 .form-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: #e9edef;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--wa-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .form-subtitle {
-  font-size: 0.875rem;
-  color: #8696a0;
-  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--wa-text-secondary);
+  margin-top: 0.35rem;
 }
 
-/* FORM ELEMENTS */
-.form-group {
+/* --- Inputs --- */
+.input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 0.35rem;
 }
 
-.form-label {
+.input-label {
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #d1d7db;
+  font-weight: 600;
+  color: var(--wa-green);
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .required-asterisk {
-  color: #00a884;
+  color: var(--wa-error);
 }
 
 .form-input {
   width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid #222d34;
-  background-color: #111b21;
-  padding: 0.75rem;
-  font-size: 0.875rem;
-  color: #e9edef;
-  transition: all 0.2s ease;
+  border-radius: 0.5rem;
+  border: 1px solid var(--wa-border);
+  background-color: var(--wa-input-bg);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.9rem;
+  color: var(--wa-text-primary);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-input::placeholder {
@@ -216,67 +212,77 @@ body.login-page, body {
 }
 
 .form-input:focus {
-  border-color: #00a884;
-  box-shadow: 0 0 0 4px rgba(0, 168, 132, 0.15);
-  outline: none;
+  border-color: var(--wa-green);
+  box-shadow: 0 0 0 1px var(--wa-green);
 }
 
-/* BUTTON */
+.input-hint {
+  font-size: 0.725rem;
+  color: var(--wa-text-secondary);
+  line-height: 1.4;
+  margin-top: 0.15rem;
+}
+
+/* --- Requisitos de Contraseña --- */
+.password-requirements {
+  background-color: var(--wa-input-bg);
+  border: 1px solid var(--wa-border);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.requirements-list {
+  list-style: none;
+  font-size: 0.725rem;
+  color: var(--wa-text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* --- Botón de Envío Estilo WhatsApp --- */
 .submit-btn {
   width: 100%;
-  margin-top: 0.75rem;
-  background-color: #00a884;
-  padding-top: 0.875rem;
-  padding-bottom: 0.875rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 0.75rem;
-  font-weight: 700;
-  font-size: 0.875rem;
-  color: #111b21;
+  margin-top: 0.5rem;
+  background-color: var(--wa-green);
+  padding: 0.85rem 1rem;
+  border-radius: 2rem; /* Bordes totalmente redondeados estilo botón principal WA */
+  font-weight: 600;
+  font-size: 0.825rem;
+  color: #111b21; /* Texto oscuro sobre el botón verde */
+  text-align: center;
+  letter-spacing: 0.05em;
   border: none;
   cursor: pointer;
-  letter-spacing: 0.025em;
-  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background-color: #029071;
+  background-color: #02b992;
 }
 
 .submit-btn:active:not(:disabled) {
-  background-color: #027eb5;
+  background-color: var(--wa-green-hover);
+  transform: scale(0.99);
 }
 
 .submit-btn:disabled {
-  opacity: 0.3;
+  background-color: #2a3942;
+  color: #667781;
   box-shadow: none;
   cursor: not-allowed;
 }
 
-/* CONTROL DE DIMENSIONES GLOBALES */
-img {
-  max-width: 100%;
-}
-
-svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* DYNAMIC NOTIFICATION OUTLINES */
-.outline-green-700 { outline: 2px solid #00a884; }
-.outline-red-700 { outline: 2px solid #ea4335; }
-.outline-indigo-700 { outline: 2px solid #027eb5; }
-.outline-purple-700 { outline: 2px solid #a855f7; }
-
-/* MEDIA QUERIES */
-@media (max-width: 768px) {
-  .wa-menu-icon {
-    display: block;
-  }
-
-  .wa-desktop-menu {
-    display: none;
-  }
+/* --- Clases Dinámicas de Validación --- */
+.outline-green { border-color: var(--wa-green) !important; }
+.outline-red { border-color: var(--wa-error) !important; }
+/* Mantiene el fondo oscuro cuando el navegador autocompleta los campos */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--wa-text-primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--wa-input-bg) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }

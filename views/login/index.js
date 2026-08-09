@@ -12,7 +12,7 @@ form.addEventListener("submit", async (e) => {
     }
     // console.log(user);
     await axios.post("/api/login", user);
-    window.location.pathname = `/todos/`;
+    window.location.pathname = `/todos/`; // Redirigir a la página de todos después del inicio de sesión exitoso
   } catch (error) {
     console.log(error)
   }

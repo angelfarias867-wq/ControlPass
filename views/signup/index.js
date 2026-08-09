@@ -1,7 +1,6 @@
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,16}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const NAME_REGEX =
-  /^[A-Z\u00d1][a-zA-Z-ÿí\u00f1\u00d1]+(\s*[A-Z\u00d1][a-zA-Z-ÿí\u00f1\u00d1\s]*)$/;
+const NAME_REGEX = /^[A-ZÁÉÍÓÚÑÜ][a-záéíóúñü]+(\s+[A-ZÁÉÍÓÚÑÜ][a-záéíóúñü]+)*$/;
 
 const form = document.querySelector("#form");
 const nameInput = document.querySelector("#name-input");
@@ -11,7 +10,7 @@ const confirmPasswordInput = document.querySelector("#match-input");
 const formBtn = document.querySelector("#form-btn");
 const notification = document.querySelector("#notification")
 
-import { createNotification } from "/components/notification.js";
+//import { createNotification } from "/components/notification.js";
 
 let nameTest = false;
 let emailTest = false;
@@ -75,16 +74,16 @@ form.addEventListener("submit", async (e) => {
 
     // console.log(data);
 
-     createNotification(false, data);
-    setTimeout(() => {
- notification.innerHTML = ""
-    }, 5000);
+     //createNotification(false, data);
+    //setTimeout(() => {
+    // notification.innerHTML = ""
+    //}, 5000);
 
     //Limpieza del formulario
-   nameInput.value = ""
-   emailInput.value = ""
- passwordInput.value = ""
-confirmPasswordInput.value = ""
+    nameInput.value = "";
+    emailInput.value = "";
+    passwordInput.value = "";
+    confirmPasswordInput.value = ""
 
 //Devuelve los inputs a su estado inicial, osea deshabilita el boton
 validation(nameInput, false)
@@ -94,9 +93,9 @@ validation(confirmPasswordInput, false)
 
   } catch (error) {
     //Llama a la notificacion pero como error
-     createNotification(true, error.response.data.error);
-    setTimeout(() => {
-notification.innerHTML = ""
-    }, 5000);
+    //createNotification(true, error.response.data.error);
+    //setTimeout(() => {
+    // notification.innerHTML = ""
+    //}, 5000);
   }
 });
