@@ -106,9 +106,11 @@ body {
 .bus-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
+  width: 100%;
+  max-width: 650px; /* Ajusta el ancho para que coincida con el formulario */
+  margin: 0 auto;   /* Centra las tarjetas en el medio de la pantalla */
 }
-
 /* ==========================================================================
    ESTILOS DE LAS TARJETAS DE BUSES (.bus-card)
    ========================================================================== */
@@ -248,9 +250,10 @@ body {
   /* Las tarjetas de buses se organizan en varias columnas */
   .bus-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    width: 100%;
+    max-width: 800px; /* Ancho total centrado para las tarjetas */
+    margin: 0 auto;
   }
 
   .btn-primary {
