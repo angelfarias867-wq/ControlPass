@@ -14,10 +14,11 @@ loginRouter.post('/', async (request, response) => {
   const isAdmin = (email === adminEmail) && (password === adminPassword);
 
   if (isAdmin) {
-    // Es True -> Generamos token de Admin y enviamos respuesta
+    // Es True -> Generamos token de Admin con el nombre 'Administrador'
     const userForToken = {
       id: "admin-static-id",
-      role: "admin"
+      role: "admin",
+      name: "Administrador" // 👈 Nombre para la cuenta de Admin
     };
 
     const accessToken = jwt.sign(userForToken, process.env.ACCESS_TOKEN_SECRET, {
@@ -49,17 +50,17 @@ loginRouter.post('/', async (request, response) => {
     return response.status(400).json({ error: "Tu email no ha sido verificado" });
   }
 
-  // Comparamos la contraseña encriptada (deuelve true o false)
+  // Comparamos la contraseña encriptada (devuelve true o false)
   const isPasswordCorrect = await bcrypt.compare(password, userExists.passwordHash);
 
   if (!isPasswordCorrect) {
     return response.status(400).json({ error: "email o contraseña incorrectos" });
   }
 
-  // Si todo dio True -> Generamos token de Usuario normal
   const userForToken = {
     id: userExists._id,
-    role: userExists.role || 'user'
+    role: userExists.role || 'user',
+    name: userExists.name // 👈 Toma la propiedad 'name' del registro en MongoDB
   };
 
   const accessToken = jwt.sign(userForToken, process.env.ACCESS_TOKEN_SECRET, {

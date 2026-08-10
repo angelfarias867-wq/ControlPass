@@ -127,12 +127,14 @@ busForm.addEventListener('submit', async (e) => {
   };
 
   try {
-    await axios.post('/api/buses', busPayload, { withCredentials: true });
-    window.location.pathname = '/listBuses/';
-  } catch (error) {
-    console.error('Error al guardar el bus:', error);
-    alert('Ocurrió un error al guardar el bus');
-  }
+  const response = await axios.post('/api/buses', busPayload, {
+    withCredentials: true // Sin esto, Axios NO envía las cookies httpOnly
+  });
+
+  alert('Bus guardado exitosamente');
+} catch (error) {
+  console.log('Error al guardar el bus:', error);
+}
 });
 
 // Botón de regresar

@@ -1,10 +1,15 @@
 require("dotenv").config();
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const busesRouter = require('./controllers/buses');
+
+const { userExtractor } = require('./middleware/auth'); 
+
 
 const app = express();
 exports.app = app;
@@ -23,8 +28,9 @@ console.log(error);
 })()
 
 
-app.use(express.json())
-
+app.use(express.json());
+app.use(cors());
+app.use(cookieParser());
 
 //Rutas Frontend
 app.use("/", express.static(path.resolve("views", "login")));
@@ -38,6 +44,6 @@ app.use('/img', express.static(path.resolve('img')));
 //Rutas backend
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
-app.use("/api/buses", busesRouter)
+app.use('/api/buses', userExtractor, busesRouter);
 
 module.exports = app;

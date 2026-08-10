@@ -11,21 +11,34 @@ busesRouter.get("/", async (request, response) => {
 
 // Crear un nuevo bus
 busesRouter.post("/", async (request, response) => {
-  const user = request.user;
-  const { numeroBus, placa, nombreEntidad, lugarEntidad, cantidadNinos, cantidadAdultos } = request.body;
+  try {
+    const user = request.user;
 
-  const newBus = new Bus({
-    usuario: user.name, // Asigna automáticamente el nombre del usuario logueado
-    numeroBus,
-    placa,
-    nombreEntidad,
-    lugarEntidad,
-    cantidadNinos,
-    cantidadAdultos
-  });
+    if (!user) {
+      return response.status(401).json({ 
+        error: "No estás autenticado o la sesión expiró" 
+      });
+    }
 
-  const savedBus = await newBus.save();
-  return response.status(201).json(savedBus);
+    const { numeroBus, placa, nombreEntidad, lugarEntidad, cantidadNinos, cantidadAdultos } = request.body;
+
+    const newBus = new Bus({
+      usuario: request.user.name,
+      numeroBus,
+      placa,
+      nombreEntidad,
+      lugarEntidad,
+      cantidadNinos,
+      cantidadAdultos
+    });
+
+    const savedBus = await newBus.save();
+    return response.status(201).json(savedBus);
+
+  } catch (error) {
+    console.error("Error al guardar el bus:", error);
+    return response.status(400).json({ error: error.message });
+  }
 });
 
 // Eliminar un bus por ID
