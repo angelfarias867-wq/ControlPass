@@ -7,13 +7,17 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   try {
     const user = {
-    email: emailImput.value,
-    password: passwordInput.value
+      email: emailImput.value,
+      password: passwordInput.value
+    };
+    const { data } = await axios.post("/api/login", user);
+
+    if (data.user) {
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
     }
-    // console.log(user);
-    await axios.post("/api/login", user);
-    window.location.pathname = `/todos/`; // Redirigir a la página de todos después del inicio de sesión exitoso
+
+    window.location.pathname = data.redirectUrl || '/listBuses/';
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });

@@ -10,11 +10,8 @@ console.log("Admin Password cargado:", adminPassword);
 loginRouter.post('/', async (request, response) => {
   const { email, password } = request.body;
 
-  // ------------------------------------------------------------------
   // EVALUACIÓN 1: ¿Es el Administrador? (Comparación True / False)
-  // ------------------------------------------------------------------
   const isAdmin = (email === adminEmail) && (password === adminPassword);
-  
 
   if (isAdmin) {
     // Es True -> Generamos token de Admin y enviamos respuesta
@@ -35,13 +32,11 @@ loginRouter.post('/', async (request, response) => {
 
     return response.status(200).json({ 
       role: 'admin', 
-      redirectUrl: '/admin/' 
+      redirectUrl: '/listBuses/' 
     });
   }
 
-  // ------------------------------------------------------------------
   // EVALUACIÓN 2: ¿Es un Usuario registrado en MongoDB?
-  // ------------------------------------------------------------------
   const userExists = await User.findOne({ email });
 
   // Si no existe el correo en la base de datos (false)
@@ -79,7 +74,7 @@ loginRouter.post('/', async (request, response) => {
 
   return response.status(200).json({ 
     role: 'user', 
-    redirectUrl: '/todos/' 
+    redirectUrl: '/listBuses/' 
   });
 });
 

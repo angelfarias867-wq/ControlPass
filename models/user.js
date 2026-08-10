@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    //todos: [{
-        //type: mongoose.Schema.Types.ObjectId,
-        //ref: 'Todo'
-    //}]
+    buses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Bus'
+    }]
 })
 
 userSchema.set('toJSON', {
@@ -33,4 +33,3 @@ const User = mongoose.model('User', userSchema);
 
 //Se exporta el modelo
 module.exports = User;
-

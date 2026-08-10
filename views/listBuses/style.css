@@ -1,0 +1,260 @@
+/* ==========================================================================
+   PALETA DE COLORES WHATSAPP DARK MODE
+   ========================================================================== */
+:root {
+  --wa-bg-app: #0b141a;          /* Fondo oscuro principal */
+  --wa-header-bg: #1f2c34;      /* Encabezados y menús flotantes */
+  --wa-card-bg: #111b21;        /* Fondo de tarjetas de buses */
+  --wa-card-border: #222d34;    /* Bordes discretos */
+  --wa-text-primary: #e9edef;   /* Texto principal blanco suave */
+  --wa-text-secondary: #8696a0; /* Texto secundario gris */
+  --wa-green-accent: #00a884;   /* Verde característico WhatsApp */
+  --wa-green-hover: #008f70;    /* Verde estado presionado */
+  --wa-icon-bg: #2a3942;        /* Fondo círculos / botones de icono */
+  --wa-danger: #ea868f;         /* Rojo suave para acción de eliminar */
+}
+
+/* Reset Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--wa-bg-app);
+  color: var(--wa-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Envoltorio principal de la app */
+.app-container {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* Se eliminaron max-width, max-height, border-radius y box-shadow */
+}
+
+/* Header */
+.header {
+  background-color: var(--wa-header-bg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--wa-card-border);
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--wa-text-primary);
+}
+
+/* Botón Configuración "C" */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-icon-bg);
+  color: var(--wa-text-primary);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--wa-card-border);
+}
+
+/* Avatar de Inicial "A" */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/* Área de contenido con scroll dinámico */
+.main-content {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ==========================================================================
+   ESTILOS DE LAS TARJETAS DE BUSES (.bus-card)
+   ========================================================================== */
+.bus-card {
+  background-color: var(--wa-card-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative; /* Necesario para posicional el menú de opciones */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  user-select: none; /* Evita seleccionar texto al mantener pulsado */
+  -webkit-user-select: none;
+  transition: transform 0.1s ease, border-color 0.2s ease;
+}
+
+.bus-card:active {
+  transform: scale(0.99);
+}
+
+.driver-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--wa-text-primary);
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--wa-text-primary);
+}
+
+.institution {
+  font-size: 0.95rem;
+  color: var(--wa-text-secondary);
+  margin: 2px 0;
+}
+
+.metrics {
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   MENÚ FLOTANTE AL DEJAR PULSADO (LONG PRESS)
+   ========================================================================== */
+.bus-options-menu {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--wa-header-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.bus-options-menu button {
+  background: transparent;
+  border: none;
+  color: var(--wa-text-primary);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bus-options-menu button:hover {
+  background-color: var(--wa-card-border);
+}
+
+.bus-options-menu .btn-delete {
+  color: var(--wa-danger);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Estado Vacío */
+.empty-state {
+  text-align: center;
+  margin: auto; /* Centra el texto en el medio de la pantalla */
+  color: var(--wa-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Footer & Botón de Acción */
+.footer {
+  padding: 20px;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  justify-content: center; /* Centra el botón horizontalmente */
+}
+
+.btn-primary {
+  width: 100%;
+  max-width: 480px; /* Controla el ancho máximo en computadoras */
+  padding: 14px 28px;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--wa-green-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   ADAPTABILIDAD PANTALLA COMPLETA (DESKTOP)
+   ========================================================================== */
+@media (min-width: 768px) {
+   .header, .main-content, .footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  /* Las tarjetas de buses se organizan en varias columnas */
+  .bus-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    width: 100%;
+  }
+
+  .btn-primary {
+    width: auto;
+    padding: 14px 40px;
+  }
+}

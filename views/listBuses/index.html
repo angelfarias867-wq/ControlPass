@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>listBuses</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="header">
+      <button id="btn-config" class="icon-btn" aria-label="Configuración">C</button>
+      <h1 class="header-title">Listado de Buses</h1>
+      <div id="user-avatar" class="user-avatar">A</div>
+    </header>
+
+    <!-- Contenido Principal: Tarjetas dinámicas -->
+    <main class="main-content">
+      <div id="bus-list" class="bus-list">
+        
+        <!-- Estado Vacío (se oculta cuando hay buses) -->
+        <div id="empty-state" class="empty-state">
+          <p>no han ingresado buses el día de hoy</p>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <button id="btn-new-bus" class="btn-primary">Nuevo Bus</button>
+    </footer>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

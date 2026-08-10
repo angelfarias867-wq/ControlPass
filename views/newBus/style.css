@@ -1,0 +1,177 @@
+:root {
+  --wa-bg-app: #0b141a;
+  --wa-header-bg: #1f2c34;
+  --wa-card-bg: #111b21;
+  --wa-card-border: #222d34;
+  --wa-text-primary: #e9edef;
+  --wa-text-secondary: #8696a0;
+  --wa-green-accent: #00a884;
+  --wa-green-hover: #008f70;
+  --wa-icon-bg: #2a3942;
+  --wa-input-bg: #2a3942;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--wa-bg-app);
+  color: var(--wa-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--wa-header-bg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--wa-card-border);
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-icon-bg);
+  color: var(--wa-text-primary);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+
+.bus-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 650px; /* Limita el ancho del formulario en PC para que no se estire en exceso */
+  margin: 0 auto;    /* Centra horizontalmente todo el formulario en la pantalla */
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: var(--wa-text-secondary);
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  background-color: var(--wa-input-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 8px;
+  color: var(--wa-text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--wa-green-accent);
+}
+
+.form-group select option {
+  background-color: var(--wa-header-bg);
+  color: var(--wa-text-primary);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center; /* Centra el botón en el formulario */
+}
+
+.btn-primary {
+  width: 100%;
+  max-width: 480px; /* Ancho cómodo alineado con la vista del listado */
+  padding: 14px;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--wa-green-hover);
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding: 16px 40px;
+  }
+
+  .main-content {
+    padding: 30px 40px;
+  }
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Bus - ControlPass</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="header">
+      <button id="btn-back" class="icon-btn" type="button" aria-label="Volver">&larr;</button>
+      <h1 class="header-title" id="form-title">Nuevo Bus</h1>
+      <div id="user-avatar" class="user-avatar">A</div>
+    </header>
+
+    <main class="main-content">
+      <form id="bus-form" class="bus-form">
+
+        <!-- Número de Bus y Placa -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="numeroBus">Bus</label>
+            <input type="number" id="numeroBus" placeholder="Número de Bus" required min="1">
+          </div>
+          <div class="form-group">
+            <label for="placa">Placa</label>
+            <input type="text" id="placa" placeholder="Placa" required style="text-transform: uppercase;">
+          </div>
+        </div>
+
+        <!-- Clasificación de la Entidad -->
+        <div class="form-group">
+          <label for="clasificacionEntidad">Clasificación de la Entidad</label>
+          <select id="clasificacionEntidad" required>
+            <option value="" disabled selected>Clasifica la entidad</option>
+            <option value="colegio">Colegio</option>
+            <option value="comuna">Comuna</option>
+            <option value="institucion">Institución</option>
+            <option value="ministerio">Ministerio</option>
+          </select>
+        </div>
+
+        <!-- Iniciales del Colegio (Habilitado solo si es Colegio) -->
+        <div class="form-group">
+          <label for="inicialesColegio">Iniciales del colegio</label>
+          <select id="inicialesColegio" disabled>
+            <option value="" disabled selected>Elegir qué tipo de colegio es</option>
+            <option value="U.E.N.">U.E.N.</option>
+            <option value="U.E.E.">U.E.E.</option>
+            <option value="U.E.P.">U.E.P.</option>
+            <option value="U.E.M.">U.E.M.</option>
+            <option value="L.N.">L.N.</option>
+            <option value="C.E.I.P.">C.E.I.P.</option>
+            <option value="E.B.N. / E.B.E.">E.B.N. / E.B.E.</option>
+            <option value="C.E.I.N.">C.E.I.N.</option>
+            <option value="U.E.A.">U.E.A.</option>
+            <option value="U.E.P.A.">U.E.P.A.</option>
+            <option value="E.T.N. / E.T.C.R.">E.T.N. / E.T.C.R.</option>
+          </select>
+        </div>
+
+        <!-- Nombre de la Entidad -->
+        <div class="form-group">
+          <label for="nombreEntidad">Nombre</label>
+          <input type="text" id="nombreEntidad" placeholder="Ingresa el nombre de la entidad" required>
+        </div>
+
+        <!-- Estado -->
+        <div class="form-group">
+          <label for="estado">Estado</label>
+          <select id="estado" required>
+            <option value="" disabled selected>Elige el estado</option>
+            <option value="Carabobo">Carabobo</option>
+            <option value="Aragua">Aragua</option>
+            <option value="Miranda">Miranda</option>
+            <option value="Guarico">Guárico</option>
+            <option value="Anzoategui">Anzoátegui</option>
+            <option value="Distrito Capital">Distrito Capital</option>
+            <option value="La Guaira">La Guaira</option>
+          </select>
+        </div>
+
+        <!-- Municipio -->
+        <div class="form-group">
+          <label for="municipio">Municipio</label>
+          <select id="municipio" required disabled>
+            <option value="" disabled selected>Elige el municipio</option>
+          </select>
+        </div>
+
+        <!-- Parroquia -->
+        <div class="form-group">
+          <label for="parroquia">Parroquia</label>
+          <select id="parroquia" required disabled>
+            <option value="" disabled selected>Elige la parroquia</option>
+          </select>
+        </div>
+
+        <!-- Cantidad de Niños y Adultos -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cantidadNinos">Niños</label>
+            <input type="number" id="cantidadNinos" placeholder="0" min="0" value="0" required>
+          </div>
+          <div class="form-group">
+            <label for="cantidadAdultos">Adultos</label>
+            <input type="number" id="cantidadAdultos" placeholder="0" min="0" value="0" required>
+          </div>
+        </div>
+
+        <!-- Botón de Envío -->
+        <div class="form-actions">
+          <button type="submit" id="btn-submit" class="btn-primary">Agregar Bus</button>
+        </div>
+
+      </form>
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
