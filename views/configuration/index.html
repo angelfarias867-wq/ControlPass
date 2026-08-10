@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ControlPass - Configuración</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- CDN de Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <!-- Header / Barra Superior -->
+  <header class="header">
+    <div class="header-title-container">
+      <a href="/listBuses/" class="back-link">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Volver</span>
+      </a>
+      <h1 class="header-title">Configuración</h1>
+    </div>
+    
+    <!-- Badge de rol -->
+    <div id="user-role-badge" class="role-badge">
+      Cargando...
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="main-container">
+
+    <!-- SECCIÓN ADMINISTRACIÓN (Oculta por defecto con la clase 'hidden') -->
+    <section id="admin-section" class="section-group hidden">
+      <h2 class="section-title admin-title">Panel de Administración</h2>
+      
+      <div class="settings-card">
+        <!-- Chequeo del Día -->
+        <button id="btn-chequeo-dia" class="settings-item">
+          <div class="item-content">
+            <svg class="icon icon-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Chequeo del día</span>
+          </div>
+          <svg class="icon arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Reporte Momentáneo -->
+        <button id="btn-reporte-momentaneo" class="settings-item">
+          <div class="item-content">
+            <svg class="icon icon-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>Reporte momentáneo</span>
+          </div>
+          <svg class="icon arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        <!-- Reporte Final -->
+        <button id="btn-reporte-final" class="settings-item">
+          <div class="item-content">
+            <svg class="icon icon-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+            </svg>
+            <span>Reporte final</span>
+          </div>
+          <svg class="icon arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECCIÓN GENERAL (Para todos) -->
+    <section class="section-group">
+      <h2 class="section-title general-title">Ajustes Generales</h2>
+      
+      <div class="settings-card">
+        <!-- Toggle Modo Oscuro -->
+        <div class="settings-item no-hover">
+          <div class="item-content">
+            <svg class="icon icon-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <span>Modo oscuro</span>
+          </div>
+          <!-- Switch Nativo -->
+          <label class="switch">
+            <input type="checkbox" id="theme-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Cerrar Sesión -->
+        <button id="btn-logout" class="settings-item danger">
+          <div class="item-content">
+            <svg class="icon icon-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span>Cerrar sesión</span>
+          </div>
+          <svg class="icon arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>

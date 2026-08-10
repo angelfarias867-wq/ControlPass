@@ -142,5 +142,5 @@ btnNewBus.addEventListener('click', () => {
 });
 
 btnConfig.addEventListener('click', () => {
-  window.location.pathname = '/configuracion';
+  window.location.pathname = '/configuration';
 });

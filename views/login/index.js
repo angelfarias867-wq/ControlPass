@@ -15,6 +15,9 @@ form.addEventListener("submit", async (e) => {
     if (data.user) {
       localStorage.setItem("currentUser", JSON.stringify(data.user));
     }
+    if (data.role) {
+      localStorage.setItem("role", data.role);
+    }
 
     window.location.pathname = data.redirectUrl || '/listBuses/';
   } catch (error) {

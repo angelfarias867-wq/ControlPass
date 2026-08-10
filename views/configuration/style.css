@@ -1,0 +1,230 @@
+/* Variables de color de la paleta WhatsApp Web Dark */
+:root {
+  --bg-main: #111b21;
+  --bg-card: #202c33;
+  --bg-hover: #2a3942;
+  --border-color: #222d34;
+  --accent-green: #00a884;
+  --text-main: #e9edef;
+  --text-muted: #8696a0;
+  --danger-color: #f87171;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Clase de utilidad para ocultar la sección de admin */
+.hidden {
+  display: none !important;
+}
+
+/* Header */
+.header {
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--accent-green);
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.role-badge {
+  background-color: var(--bg-hover);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+/* Layout Principal */
+.main-container {
+  flex: 1;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Grupos y Secciones */
+.section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 0.25rem;
+}
+
+.admin-title {
+  color: var(--accent-green);
+}
+
+.general-title {
+  color: var(--text-muted);
+}
+
+/* Tarjetas e Ítems */
+.settings-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.settings-item {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item:not(.no-hover):hover {
+  background-color: var(--bg-hover);
+}
+
+.item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Colores de Íconos */
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon-accent {
+  color: var(--accent-green);
+}
+
+.icon-muted {
+  color: var(--text-muted);
+}
+
+.icon-danger {
+  color: var(--danger-color);
+}
+
+.arrow-icon {
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.settings-item:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* Estilo para opción de Cerrar Sesión (Rojo) */
+.settings-item.danger {
+  color: var(--danger-color);
+}
+
+.settings-item.danger .arrow-icon {
+  color: rgba(248, 113, 113, 0.5);
+}
+
+/* Interruptor / Toggle Switch Nativo en CSS */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--bg-hover);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-green);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
