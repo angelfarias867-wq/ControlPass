@@ -132,6 +132,8 @@ busForm.addEventListener('submit', async (e) => {
   });
 
   alert('Bus guardado exitosamente');
+
+  window.location.pathname = '/listBuses/';
 } catch (error) {
   console.log('Error al guardar el bus:', error);
 }

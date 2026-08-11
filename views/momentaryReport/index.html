@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Momentary Report</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <main class="page-container">
+    <div class="report-card">
+      <h1 class="report-title">Reporte Momentáneo</h1>
+
+      <div class="report-list">
+        <div class="report-row">
+          <span class="report-label">Buses</span>
+          <span class="report-val" id="val-buses">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Comunas</span>
+          <span class="report-val" id="val-comunas">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Colegios</span>
+          <span class="report-val" id="val-colegios">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Instituciones</span>
+          <span class="report-val" id="val-instituciones">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Ministerios</span>
+          <span class="report-val" id="val-ministerios">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Niños</span>
+          <span class="report-val" id="val-ninos">0</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Adultos</span>
+          <span class="report-val" id="val-adultos">0</span>
+        </div>
+      </div>
+
+      <button id="btn-volver" class="btn-volver">Volver</button>
+    </div>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>

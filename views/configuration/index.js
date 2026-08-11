@@ -62,10 +62,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (btnReporteMomentaneo) {
-    btnReporteMomentaneo.addEventListener('click', () => {
-      console.log('Click en Reporte momentáneo');
-    });
-  }
+  btnReporteMomentaneo.addEventListener('click', () => {
+    window.location.href = '/momentaryReport/'; 
+  });
+}
 
   if (btnReporteFinal) {
     btnReporteFinal.addEventListener('click', () => {

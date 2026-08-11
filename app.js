@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const busesRouter = require('./controllers/buses');
+const logoutRouter = require('./controllers/logout');
 
 const { userExtractor } = require('./middleware/auth'); 
 
@@ -38,6 +39,7 @@ app.use('/signup', express.static(path.resolve('views','signup')));
 app.use('/listBuses', express.static(path.resolve('views','listBuses')));
 app.use('/newBus', express.static(path.resolve('views','newBus')));
 app.use('/configuration', express.static(path.resolve('views','configuration')));
+app.use('/momentaryReport', express.static(path.resolve('views','momentaryReport')));
 app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
 
@@ -46,5 +48,6 @@ app.use('/img', express.static(path.resolve('img')));
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use('/api/buses', userExtractor, busesRouter);
+app.use("/api/logout", logoutRouter)
 
 module.exports = app;
