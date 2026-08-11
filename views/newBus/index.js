@@ -126,7 +126,6 @@ selectMunicipio?.addEventListener('change', () => {
 });
 
 // 5. CARGAR DATOS SI ESTAMOS EN MODO EDICIÓN
-// 5. CARGAR DATOS SI ESTAMOS EN MODO EDICIÓN
 if (editBusId) {
   document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -138,7 +137,7 @@ if (editBusId) {
       if (inputNinos) inputNinos.value = bus.cantidadNinos ?? 0;
       if (inputAdultos) inputAdultos.value = bus.cantidadAdultos ?? 0;
 
-      // 📍 Lógica para Estados -> Municipios -> Parroquias
+      // Lógica para Estados -> Municipios -> Parroquias
       if (selectEstado && bus.estado) {
         selectEstado.value = bus.estado;
         selectEstado.dispatchEvent(new Event('change')); // Dispara el evento para poblar municipios
@@ -164,7 +163,6 @@ if (editBusId) {
   });
 }
 
-// 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
 // 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
 busForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
