@@ -9,7 +9,7 @@ const userAvatar = document.querySelector('#user-avatar');
 let currentUser = null;
 
 // 1. LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
-const addLongPressListener = (cardElement, bus) => {
+const optionspress = (cardElement, bus) => {
   let timer;
 
   const startPress = () => {
@@ -101,7 +101,7 @@ const createBusCard = (bus) => {
     </div>
   `;
 
-  addLongPressListener(article, bus);
+  optionspress(article, bus);
 
   return article;
 };

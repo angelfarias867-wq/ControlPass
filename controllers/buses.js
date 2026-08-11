@@ -62,20 +62,22 @@ busesRouter.delete("/:id", async (request, response) => {
 });
 
 // Actualizar/Editar un bus por ID
-busesRouter.patch("/:id", async (request, response) => {
-  const user = request.user;
-  const { numeroBus, placa, nombreEntidad, lugarEntidad, cantidadNinos, cantidadAdultos } = request.body;
+busesRouter.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const busActualizado = req.body;
 
-  await Bus.findByIdAndUpdate(request.params.id, {
-    numeroBus,
-    placa,
-    nombreEntidad,
-    lugarEntidad,
-    cantidadNinos,
-    cantidadAdultos
-  });
+    // Si usas Mongoose / MongoDB:
+    const bus = await Bus.findByIdAndUpdate(id, busActualizado, { new: true });
 
-  return response.sendStatus(200);
+    if (!bus) {
+      return res.status(404).json({ error: 'El bus no existe en la base de datos' });
+    }
+
+    return res.status(200).json(bus);
+  } catch (error) {
+    return res.status(500).json({ error: 'Error al actualizar el bus' });
+  }
 });
 
 module.exports = busesRouter;

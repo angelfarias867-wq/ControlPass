@@ -126,6 +126,7 @@ selectMunicipio?.addEventListener('change', () => {
 });
 
 // 5. CARGAR DATOS SI ESTAMOS EN MODO EDICIÓN
+// 5. CARGAR DATOS SI ESTAMOS EN MODO EDICIÓN
 if (editBusId) {
   document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -137,13 +138,14 @@ if (editBusId) {
       if (inputNinos) inputNinos.value = bus.cantidadNinos ?? 0;
       if (inputAdultos) inputAdultos.value = bus.cantidadAdultos ?? 0;
 
+      // 📍 Lógica para Estados -> Municipios -> Parroquias
       if (selectEstado && bus.estado) {
         selectEstado.value = bus.estado;
-        selectEstado.dispatchEvent(new Event('change'));
+        selectEstado.dispatchEvent(new Event('change')); // Dispara el evento para poblar municipios
 
         if (selectMunicipio && bus.municipio) {
           selectMunicipio.value = bus.municipio;
-          selectMunicipio.dispatchEvent(new Event('change'));
+          selectMunicipio.dispatchEvent(new Event('change')); // Dispara el evento para poblar parroquias
 
           if (selectParroquia && bus.parroquia) {
             selectParroquia.value = bus.parroquia;
@@ -151,6 +153,7 @@ if (editBusId) {
         }
       }
 
+      // Cambiar texto del botón principal
       const btnSubmit = busForm?.querySelector('button[type="submit"]');
       if (btnSubmit) btnSubmit.textContent = 'Guardar Cambios';
 
@@ -162,44 +165,52 @@ if (editBusId) {
 }
 
 // 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
+// 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
 busForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  let nombreFinal = inputNombre.value.trim();
-  if (selectClasificacion?.value === 'colegio' && selectIniciales?.value) {
-    nombreFinal = `${selectIniciales.value} ${nombreFinal}`;
-  }
-
-  const busPayload = {
-    numeroBus: Number(inputNumeroBus.value),
-    placa: inputPlaca.value.toUpperCase().trim(),
-    nombreEntidad: nombreFinal,
-    lugarEntidad: selectParroquia.value,
-    estado: selectEstado.value,
-    municipio: selectMunicipio.value,
-    parroquia: selectParroquia.value,
-    cantidadNinos: Number(inputNinos.value),
-    cantidadAdultos: Number(inputAdultos.value)
-  };
-
   try {
+    let nombreFinal = inputNombre ? inputNombre.value.trim() : '';
+    
+    // Si la clasificación es colegio y hay iniciales seleccionadas
+    if (selectClasificacion?.value === 'colegio' && selectIniciales?.value) {
+      nombreFinal = `${selectIniciales.value} ${nombreFinal}`;
+    }
+
+    // Tomamos la parroquia elegida o la del bus original como respaldo
+    const parroquiaValor = selectParroquia?.value || '';
+
+    const busPayload = {
+      numeroBus: Number(inputNumeroBus?.value || 0),
+      placa: inputPlaca?.value ? inputPlaca.value.toUpperCase().trim() : '',
+      nombreEntidad: nombreFinal,
+      lugarEntidad: parroquiaValor,
+      estado: selectEstado?.value || '',
+      municipio: selectMunicipio?.value || '',
+      parroquia: parroquiaValor,
+      cantidadNinos: Number(inputNinos?.value || 0),
+      cantidadAdultos: Number(inputAdultos?.value || 0)
+    };
+
     if (editBusId) {
-      // Editar
+      // ✏️ Enviar actualización mediante PUT
       await axios.put(`/api/buses/${editBusId}`, busPayload, { withCredentials: true });
       createNotification(false, 'Bus editado exitosamente');
     } else {
-      // Crear
+      // ➕ Enviar creación mediante POST
       await axios.post('/api/buses', busPayload, { withCredentials: true });
       createNotification(false, 'Bus guardado exitosamente');
     }
 
+    // Redirigir a la lista
     setTimeout(() => {
       window.location.pathname = '/listBuses/';
     }, 1200);
 
   } catch (error) {
     console.error('Error al procesar el bus:', error);
-    createNotification(true, error.response?.data?.error || 'Error al guardar el bus');
+    const mensajeError = error.response?.data?.error || 'Error al guardar los cambios del bus';
+    createNotification(true, mensajeError);
   }
 });
 
