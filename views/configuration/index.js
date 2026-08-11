@@ -1,13 +1,12 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const adminSection = document.querySelector('#admin-section');
-  const roleBadge = document.querySelector('#user-role-badge');
-  const btnLogout = document.querySelector('#btn-logout');
-  const themeToggle = document.querySelector('#theme-toggle');
+const adminSection = document.querySelector('#admin-section');
+const roleBadge = document.querySelector('#user-role-badge');
+const btnLogout = document.querySelector('#btn-logout');
+const themeToggle = document.querySelector('#theme-toggle');
 
   // Botones de administración
-  const btnChequeo = document.querySelector('#btn-chequeo-dia');
-  const btnReporteMomentaneo = document.querySelector('#btn-reporte-momentaneo');
-  const btnReporteFinal = document.querySelector('#btn-reporte-final');
+const btnChequeo = document.querySelector('#btn-chequeo-dia');
+const btnReporteMomentaneo = document.querySelector('#btn-reporte-momentaneo');
+const btnReporteFinal = document.querySelector('#btn-reporte-final');
 
   // 1. Obtener la sesión del usuario actual
   try {
@@ -67,9 +66,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 }
 
-  if (btnReporteFinal) {
-    btnReporteFinal.addEventListener('click', () => {
-      console.log('Click en Reporte final');
-    });
-  }
-});
+if (btnReporteFinal) {
+  btnReporteFinal.addEventListener('click', () => {
+    console.log('Click en Reporte final');
+  });
+};
