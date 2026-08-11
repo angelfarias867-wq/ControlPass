@@ -4,6 +4,7 @@ const btnConfig = document.querySelector('#btn-config');
 const btnNewBus = document.querySelector('#btn-new-bus');
 const userAvatar = document.querySelector('#user-avatar');
 
+
 // Variable global para almacenar el usuario activo
 let currentUser = null;
 
@@ -69,7 +70,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
   // ACCIÓN EDITAR
   menu.querySelector('.btn-edit').addEventListener('click', (e) => {
     e.stopPropagation();
-    window.location.href = `/newBus?edit=${bus.id}`;
+    window.location.href = `/newBus?edit=${bus._id || bus.id}`;
   });
 
   // Cerrar menú al hacer clic fuera

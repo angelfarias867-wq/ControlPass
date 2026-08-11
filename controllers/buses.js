@@ -9,6 +9,19 @@ busesRouter.get("/", async (request, response) => {
   return response.status(200).json(buses);
 });
 
+// Obtener un solo bus por ID para el formulario de edición
+busesRouter.get('/:id', async (req, res) => {
+  try {
+    const bus = await Bus.findById(req.params.id);
+    if (!bus) {
+      return res.status(404).json({ error: 'Bus no encontrado' });
+    }
+    return res.json(bus);
+  } catch (error) {
+    return res.status(500).json({ error: 'Error al obtener el bus' });
+  }
+});
+
 // Crear un nuevo bus
 busesRouter.post("/", async (request, response) => {
   try {

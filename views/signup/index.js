@@ -10,7 +10,7 @@ const confirmPasswordInput = document.querySelector("#match-input");
 const formBtn = document.querySelector("#form-btn");
 const notification = document.querySelector("#notification")
 
-//import { createNotification } from "/components/notification.js";
+import { createNotification } from '../components/notifications.js';
 
 let nameTest = false;
 let emailTest = false;
@@ -74,10 +74,10 @@ form.addEventListener("submit", async (e) => {
 
     // console.log(data);
 
-     //createNotification(false, data);
-    //setTimeout(() => {
-    // notification.innerHTML = ""
-    //}, 5000);
+    createNotification(false, data);
+    setTimeout(() => {
+    notification.innerHTML = ""
+    }, 5000);
 
     //Limpieza del formulario
     nameInput.value = "";
@@ -86,16 +86,22 @@ form.addEventListener("submit", async (e) => {
     confirmPasswordInput.value = ""
 
 //Devuelve los inputs a su estado inicial, osea deshabilita el boton
-validation(nameInput, false)
-validation(emailInput, false)
-validation(passwordInput, false)
-validation(confirmPasswordInput, false)
+  validation(nameInput, false)
+  validation(emailInput, false)
+  validation(passwordInput, false)
+  validation(confirmPasswordInput, false)
+
+  createNotification(false, '¡Usuario registrado exitosamente!');
+
+    setTimeout(() => {
+      window.location.pathname = '/';
+    }, 2000);
 
   } catch (error) {
     //Llama a la notificacion pero como error
-    //createNotification(true, error.response.data.error);
-    //setTimeout(() => {
-    // notification.innerHTML = ""
-    //}, 5000);
+    createNotification(true, error.response.data.error);
+    setTimeout(() => {
+    notification.innerHTML = ""
+    }, 5000);
   }
 });
