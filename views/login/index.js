@@ -3,6 +3,8 @@ const passwordInput = document.getElementById("password-input");
 const form = document.getElementById("form");
 const errorText = document.getElementById("error-text");
 
+import { createNotification } from '../components/notifications.js';
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   try {
@@ -21,6 +23,7 @@ form.addEventListener("submit", async (e) => {
 
     window.location.pathname = data.redirectUrl || '/listBuses/';
   } catch (error) {
+    createNotification("Usuario/contraseña incorrectos o permiso no autorizado", "error");
     console.log(error);
   }
 });

@@ -7,18 +7,26 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email: String,
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
     passwordHash: String,
-    verified:{
+    verified: {
         type: Boolean,
-        default: false
+        default: false // false por defecto, espera la aprobación del administrador
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user' // Diferencia entre usuarios normales y administradores
     },
     buses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Bus'
     }]
-})
-
+});
 userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()

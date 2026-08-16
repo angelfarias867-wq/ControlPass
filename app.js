@@ -39,7 +39,7 @@ app.use('/signup', express.static(path.resolve('views','signup')));
 app.use('/listBuses', express.static(path.resolve('views','listBuses')));
 app.use('/newBus', express.static(path.resolve('views','newBus')));
 app.use('/configuration', express.static(path.resolve('views','configuration')));
-app.use('/momentaryReport', express.static(path.resolve('views','momentaryReport')));
+//app.use('/momentaryReport', express.static(path.resolve('views','momentaryReport')));
 app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
 
