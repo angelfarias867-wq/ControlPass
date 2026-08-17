@@ -23,6 +23,7 @@ busesRouter.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo bus
+// En controllers/buses.js (POST /)
 busesRouter.post("/", async (request, response) => {
   try {
     const user = request.user;
@@ -33,10 +34,14 @@ busesRouter.post("/", async (request, response) => {
       });
     }
 
+    // Muestra en la consola de Node qué trae exactamente el token
+    console.log("Datos del usuario en la sesión:", user);
+
     const { numeroBus, placa, nombreEntidad, lugarEntidad, cantidadNinos, cantidadAdultos } = request.body;
 
     const newBus = new Bus({
-      usuario: request.user.name,
+      // Busca 'name' o 'username', si no los encuentra usa 'Usuario' por defecto
+      usuario: user.name || user.username || "Usuario",
       numeroBus,
       placa,
       nombreEntidad,
@@ -53,7 +58,6 @@ busesRouter.post("/", async (request, response) => {
     return response.status(400).json({ error: error.message });
   }
 });
-
 // Eliminar un bus por ID
 busesRouter.delete("/:id", async (request, response) => {
   const user = request.user;

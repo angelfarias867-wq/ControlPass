@@ -33,8 +33,12 @@ const busSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    cerrado: {
+        type: Boolean, 
+        default: false 
     }
-});
+}, { timestamps: true });
 
 busSchema.set('toJSON', {
     transform: (document, returnedObject) => {

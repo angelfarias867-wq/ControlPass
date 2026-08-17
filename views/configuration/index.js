@@ -7,6 +7,7 @@ const themeToggle = document.querySelector('#theme-toggle');
 const btnChequeo = document.querySelector('#btn-chequeo-dia');
 const btnReporteMomentaneo = document.querySelector('#btn-reporte-momentaneo');
 const btnReporteFinal = document.querySelector('#btn-reporte-final');
+const btnVerificacionPermisos = document.querySelector('#btn-verificacion-permisos');
 
   // 1. Obtener la sesión del usuario actual
   try {
@@ -56,7 +57,7 @@ const btnReporteFinal = document.querySelector('#btn-reporte-final');
   // 4. Listeners para los botones de Reportes del Admin (Placeholders para cuando los definamos)
   if (btnChequeo) {
     btnChequeo.addEventListener('click', () => {
-      console.log('Click en Chequeo del día');
+      window.location.href = '/dailyCheck/';
     });
   }
 
@@ -68,6 +69,13 @@ const btnReporteFinal = document.querySelector('#btn-reporte-final');
 
 if (btnReporteFinal) {
   btnReporteFinal.addEventListener('click', () => {
-    console.log('Click en Reporte final');
+    window.location.href = '/finalReport/';
   });
 };
+
+if (btnVerificacionPermisos) {
+  btnVerificacionPermisos.addEventListener('click', () => {
+    console.log('Click en Verificación de permisos');
+    window.location.href = '/permissionCheck/'; 
+  });
+}
