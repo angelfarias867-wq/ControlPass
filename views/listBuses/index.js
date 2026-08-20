@@ -8,15 +8,24 @@ const userAvatar = document.querySelector('#user-avatar');
 // Variable global para almacenar el usuario activo
 let currentUser = null;
 
+const canEditOrDelete = (bus) => {
+  if (!currentUser) return false;
+
+  const activeUserName = (currentUser.name || currentUser.username || '').trim();
+  const busOwner = (bus.usuario || '').trim();
+
+  // Retorna true ÚNICAMENTE si los nombres coinciden
+  return activeUserName === busOwner;
+};
+
 // 1. LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
 const optionspress = (cardElement, bus) => {
   let timer;
 
   const startPress = () => {
-    // Si la tarjeta no pertenece al usuario que inició sesión, no abre las opciones
-    if (currentUser && currentUser.name !== bus.usuario) return;
+    // Si no es el creador directo del bus, no se activa el menú
+    if (!canEditOrDelete(bus)) return;
 
-    // Se activa si mantiene presionado durante 600 milisegundos
     timer = setTimeout(() => {
       mostrarOpcionesBus(bus, cardElement);
     }, 600);
@@ -26,7 +35,6 @@ const optionspress = (cardElement, bus) => {
     clearTimeout(timer);
   };
 
-  // Eventos para dispositivos móviles y PC
   cardElement.addEventListener('touchstart', startPress);
   cardElement.addEventListener('touchend', cancelPress);
   cardElement.addEventListener('touchmove', cancelPress);
@@ -55,7 +63,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
     e.stopPropagation();
     if (confirm('¿Estás seguro de que deseas eliminar este bus?')) {
       try {
-        await axios.delete(`/api/buses/${bus.id}`, { withCredentials: true });
+        await axios.delete(`/api/buses/${bus._id || bus.id}`, { withCredentials: true });
         cardElement.remove();
 
         if (busListContainer.querySelectorAll('.bus-card').length === 0) {
@@ -63,6 +71,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
         }
       } catch (error) {
         console.error('Error al eliminar el bus:', error);
+        alert(error.response?.data?.error || 'No tienes permisos para realizar esta acción');
       }
     }
   });
@@ -85,7 +94,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
 // 3. FUNCIÓN PARA CREAR EL ELEMENTO HTML DE LA TARJETA
 const createBusCard = (bus) => {
   const article = document.createElement('article');
-  article.id = bus.id;
+  article.id = bus._id || bus.id;
   article.classList.add('bus-card');
 
   article.innerHTML = `
@@ -109,18 +118,14 @@ const createBusCard = (bus) => {
 // 4. CARGA INICIAL DE DATOS (AUTOEJECUTABLE ASYNC)
 (async () => {
   try {
-    // Leemos el usuario previamente guardado en el LocalStorage
     currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    // Ponemos la inicial en el avatar si existe el usuario
     if (userAvatar && currentUser && currentUser.name) {
       userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
     }
 
-    // Pedimos la lista de buses al backend
     const { data: buses } = await axios.get('/api/buses', { withCredentials: true });
 
-    // Renderizamos las tarjetas
     if (buses.length > 0) {
       if (emptyState) emptyState.style.display = 'none';
 

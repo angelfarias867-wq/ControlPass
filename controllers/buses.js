@@ -23,7 +23,6 @@ busesRouter.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo bus
-// En controllers/buses.js (POST /)
 busesRouter.post("/", async (request, response) => {
   try {
     const user = request.user;
@@ -58,27 +57,58 @@ busesRouter.post("/", async (request, response) => {
     return response.status(400).json({ error: error.message });
   }
 });
-// Eliminar un bus por ID
+
+// Eliminar un bus por ID (Únicamente el creador del bus)
 busesRouter.delete("/:id", async (request, response) => {
-  const user = request.user;
-  await Bus.findByIdAndDelete(request.params.id);
-  return response.sendStatus(204);
+  try {
+    const user = request.user;
+    if (!user) {
+      return response.status(401).json({ error: "No autenticado" });
+    }
+
+    const bus = await Bus.findById(request.params.id);
+    if (!bus) {
+      return response.status(404).json({ error: "Bus no encontrado" });
+    }
+
+    const currentUserName = user.name || user.username;
+
+    // VALIDACIÓN ESTRICTA: Solo si el nombre de usuario coincide exactamente
+    if (bus.usuario !== currentUserName) {
+      return response.status(403).json({ error: "No tienes permiso para eliminar este bus porque no lo creaste tú" });
+    }
+
+    await Bus.findByIdAndDelete(request.params.id);
+    return response.sendStatus(204);
+  } catch (error) {
+    return response.status(500).json({ error: "Error al eliminar el bus" });
+  }
 });
 
-// Actualizar/Editar un bus por ID
+// Actualizar/Editar un bus por ID (Únicamente el creador del bus)
 busesRouter.put('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const busActualizado = req.body;
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ error: "No autenticado" });
+    }
 
-    // Si usas Mongoose / MongoDB:
-    const bus = await Bus.findByIdAndUpdate(id, busActualizado, { new: true });
+    const { id } = req.params;
+    const bus = await Bus.findById(id);
 
     if (!bus) {
       return res.status(404).json({ error: 'El bus no existe en la base de datos' });
     }
 
-    return res.status(200).json(bus);
+    const currentUserName = user.name || user.username;
+
+    // VALIDACIÓN ESTRICTA: Solo si el nombre de usuario coincide exactamente
+    if (bus.usuario !== currentUserName) {
+      return res.status(403).json({ error: "No tienes permiso para editar este bus porque no lo creaste tú" });
+    }
+
+    const busActualizado = await Bus.findByIdAndUpdate(id, req.body, { new: true });
+    return res.status(200).json(busActualizado);
   } catch (error) {
     return res.status(500).json({ error: 'Error al actualizar el bus' });
   }

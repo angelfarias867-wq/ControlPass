@@ -1,6 +1,6 @@
 const dailyCheckRouter = require('express').Router();
-const Bus = require('../models/buses');   // Ajusta la mayúscula según tu archivo (ej. Bus)
-const User = require('../models/user'); // Importa el modelo de usuarios
+const Bus = require('../models/buses');
+const User = require('../models/user');
 
 // GET /api/daily-check
 dailyCheckRouter.get('/', async (req, res) => {

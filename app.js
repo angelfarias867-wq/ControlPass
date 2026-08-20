@@ -43,7 +43,7 @@ app.use('/configuration', express.static(path.resolve('views','configuration')))
 app.use('/momentaryReport', express.static(path.resolve('views', 'configuration','momentaryReport')));
 app.use('/dailyCheck', express.static(path.resolve('views', 'configuration','dailyCheck')));
 app.use('/finalReport', express.static(path.resolve('views', 'configuration','finalReport')));
-app.use('/permissionCheck', express.static(path.resolve('views', 'configuration','permissionCheck')));
+app.use('/permissionVerification', express.static(path.resolve('views', 'configuration','permissionVerification')));
 app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
 
