@@ -9,6 +9,8 @@ const btnReporteMomentaneo = document.querySelector('#btn-reporte-momentaneo');
 const btnReporteFinal = document.querySelector('#btn-reporte-final');
 const btnVerificacionPermisos = document.querySelector('#btn-verificacion-permisos');
 
+import { createConfirmation } from '../components/alerts.js';
+
   // 1. Obtener la sesión del usuario actual
   try {
     const role = localStorage.getItem('role');
@@ -68,14 +70,15 @@ const btnVerificacionPermisos = document.querySelector('#btn-verificacion-permis
 }
 
 if (btnReporteFinal) {
-  btnReporteFinal.addEventListener('click', () => {
-    window.location.href = '/finalReport/';
+  btnReporteFinal.addEventListener('click', (e) => {
+    createConfirmation('¿Seguro que quieres recibir el Reporte Final?', () => {
+      window.location.href = '/finalReport/';
+    });
   });
-};
+}
 
 if (btnVerificacionPermisos) {
   btnVerificacionPermisos.addEventListener('click', () => {
-    console.log('Click en Verificación de permisos');
-    window.location.href = '/permissionCheck/'; 
+    window.location.href = '/permissionVerification/'; 
   });
 }

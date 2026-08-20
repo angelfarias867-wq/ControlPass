@@ -133,6 +133,8 @@ body {
   gap: 0.75rem;
 }
 
+
+
 /* Tarjeta Individual estilo Autobús */
 .bus-card {
   background-color: var(--bg-card);
@@ -148,6 +150,13 @@ body {
 .bus-card:hover {
   background-color: var(--bg-hover);
   border-color: rgba(0, 168, 132, 0.3);
+}
+
+/* Separación independiente para la lista de usuarios del chequeo del día */
+#users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .user-info {

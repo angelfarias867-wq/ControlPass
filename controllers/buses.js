@@ -9,6 +9,30 @@ busesRouter.get("/", async (request, response) => {
   return response.status(200).json(buses);
 });
 
+// Endpoint para obtener el reporte momentáneo de todos los buses
+busesRouter.get("/momentaryReport", async (request, response) => {
+  try {
+    const reporte = await Bus.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalNinos: { $sum: '$cantidadNinos' },
+          totalAdultos: { $sum: '$cantidadAdultos' }
+        }
+      }
+    ]);
+
+    const ninos = reporte.length > 0 ? reporte[0].totalNinos : 0;
+    const adultos = reporte.length > 0 ? reporte[0].totalAdultos : 0;
+    const total = ninos + adultos;
+
+    return response.status(200).json({ ninos, adultos, total });
+  } catch (error) {
+    console.error("Error al generar el reporte momentáneo:", error);
+    return response.status(500).json({ error: "Error al obtener el reporte" });
+  }
+});
+
 // Obtener un solo bus por ID para el formulario de edición
 busesRouter.get('/:id', async (req, res) => {
   try {
