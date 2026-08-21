@@ -1,15 +1,13 @@
-const usersRouter = require('express').Router();// Importar el modelo de usuario
+const usersRouter = require('express').Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
 const nodemailer = require('nodemailer');
 const axios = require('axios');
-const { PAGE_URL } = require('../config'); // Importar la URL de la página desde el archivo de configuración
 
-//se valida que los campos no estén vacíos y se hace desestructuracion de objetos
+// --- 1. RUTA DE REGISTRO (SIGNUP) ---
 usersRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
-  // console.log(name, email, password);
 
   if (!name || !email || !password) {
     return response
@@ -17,24 +15,21 @@ usersRouter.post('/', async (request, response) => {
       .json({ error: 'Todos los espacios son requeridos' });
   }
 
-  //se verifica si el email ya existe
+  // Se verifica si el email ya existe
   const userExists = await User.findOne({ email });
 
-  //Si el usuario ya existe, retornar un error
   if (userExists) {
     return response
       .status(400)
       .json({ error: 'El email ya se encuentra en uso' });
   }
 
-
-//---------LA API--------------
+  // --- LA API (Abstract API) ---
   try {
     const apiKey = process.env.API_KEY;
     const url = `https://emailreputation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`;
     
     const abstractResponse = await axios.get(url);
-
     const status = abstractResponse.data?.email_deliverability?.status;
 
     if (status === 'undeliverable') {
@@ -45,26 +40,56 @@ usersRouter.post('/', async (request, response) => {
   } catch (apiError) {
     console.error('Error al conectar con Abstract API:', apiError.message);
   }
-  //--------------------------------------
+  // ------------------------------
   
-  //Se define el numero de rondas y luego y se usa la función .hash para encriptar la contraseña
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
-  //Se crea un nuevo usuario tomando como referencia el esquema de los modelos
+  // Se crea el usuario con verified: false para que aparezca en la lista de espera
   const newUser = new User({
     name,
     email,
     passwordHash,
-    verified: true,
+    verified: false, 
   });
 
-  // Se guarda el usuario en la base de datos
   await newUser.save();
   
-return response
+  return response
     .status(201)
-.json('Usuario creado exitosamente');
-})
+    .json('Usuario creado exitosamente');
+});
+
+// --- 2. RUTAS DE ADMINISTRACIÓN ---
+
+// Cambiamos a '/admin/...' porque ya estamos dentro de /api/users en app.js
+usersRouter.get('/admin/pending-users', async (request, response) => {
+  try {
+    const allUsers = await User.find({});
+    response.json({ users: allUsers });
+  } catch (error) {
+    response.status(500).json({ error: 'Error al obtener los usuarios' });
+  }
+});
+
+usersRouter.post('/admin/approve-user/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    await User.findByIdAndUpdate(id, { verified: true });
+    response.json('Usuario aprobado exitosamente');
+  } catch (error) {
+    response.status(500).json({ error: 'No se pudo aprobar al usuario' });
+  }
+});
+
+usersRouter.post('/admin/reject-user/:id', async (request, response) => {
+  try {
+    const { id } = request.params;
+    await User.findByIdAndDelete(id);
+    response.json('Solicitud rechazada');
+  } catch (error) {
+    response.status(500).json({ error: 'No se pudo rechazar la solicitud' });
+  }
+});
 
 module.exports = usersRouter;

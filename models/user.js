@@ -27,14 +27,14 @@ const userSchema = new mongoose.Schema({
         ref: 'Bus'
     }]
 });
+
 userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id;
-        delete returnedObject.__v;
-        delete returnedObject.passwordHash;
+        returnedObject.id = returnedObject._id.toString() // Aquí lo convierte a 'id'
+        delete returnedObject._id; // Aquí lo borra
+        // ...
     }
-})
+});
 
 //Se crea el modelo
 const User = mongoose.model('User', userSchema);

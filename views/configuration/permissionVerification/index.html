@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ControlPass - Verificación de Permisos</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <!-- Header / Barra Superior -->
+  <header class="header">
+    <div class="header-title-container">
+      <a href="/configuration/" class="back-link">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>Volver</span>
+      </a>
+      <h1 class="header-title">Verificación de Permisos</h1>
+    </div>
+    <div class="role-badge">Administrador</div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="main-container">
+    <section class="section-group">
+      <h2 class="section-title general-title">Usuarios en espera de aprobación</h2>
+      
+      <!-- Contenedor donde se cargarán dinámicamente las tarjetas de usuarios -->
+      <div id="pending-users-list" class="cards-container">
+        <p style="padding: 1rem; color: var(--text-muted); text-align: center;">Cargando usuarios pendientes...</p>
+      </div>
+    </section>
+  </main>
+  
+  <script type="module" src="index.js"></script>
+</body>
+</html>
