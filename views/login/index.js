@@ -15,7 +15,7 @@ form.addEventListener("submit", async (e) => {
     const { data } = await axios.post("/api/login", user);
 
     if (data.user) {
-      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
     }
     if (data.role) {
       localStorage.setItem("role", data.role);

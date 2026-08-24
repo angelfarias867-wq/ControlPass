@@ -111,9 +111,28 @@ body {
   max-width: 650px; /* Ajusta el ancho para que coincida con el formulario */
   margin: 0 auto;   /* Centra las tarjetas en el medio de la pantalla */
 }
-/* ==========================================================================
-   ESTILOS DE LAS TARJETAS DE BUSES (.bus-card)
-   ========================================================================== */
+
+/* Contenedor que agrupa el botón y el avatar a la derecha */
+.user-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Estilo para el botón de cerrar sesión acorde al diseño */
+.logout-btn.btn-primary {
+  padding: 6px 14px;      /* Más compacto que un botón de formulario */
+  font-size: 14px;        /* Letra acorde a la barra superior */
+  font-weight: 500;
+  width: auto;            /* Que no ocupe todo el ancho */
+  border-radius: 8px;     /* Mantiene la misma curvatura */
+}
+
+.logout-btn:hover {
+  background-color: rgba(16, 185, 129, 0.15); /* Efecto hover suave */
+}
+
+/* ESTILOS DE LAS TARJETAS DE BUSES (.bus-card) */
 .bus-card {
   background-color: var(--wa-card-bg);
   border: 1px solid var(--wa-card-border);

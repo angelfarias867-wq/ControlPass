@@ -2,7 +2,7 @@ const busForm = document.querySelector('#bus-form');
 const btnBack = document.querySelector('#btn-back');
 const userAvatar = document.querySelector('#user-avatar');
 const inputNumeroBus = document.querySelector('#numeroBus');
-const inputPlaca = document.querySelector('#placa');
+const inputFoto = document.querySelector('#foto');
 const selectClasificacion = document.querySelector('#clasificacionEntidad');
 const selectIniciales = document.querySelector('#inicialesColegio');
 const inputNombre = document.querySelector('#nombreEntidad');
@@ -27,8 +27,8 @@ const ubicacionesVenezuela = {
     "Girardot": ["Maracay", "Pedro José Ovalles", "Joaquín Crespo"],
     "Santiago Mariño": ["Turmero", "Arévalo Aponte"]
   },
-  "Miranda": { 
-    "Acevedo": [ "Caucagua", "Araguita", "Arévalo González", "Capaya", "El Café", "Marizapa", "Panaquire", "Ribas"],
+  "Miranda": {
+    "Acevedo": ["Caucagua", "Araguita", "Arévalo González", "Capaya", "El Café", "Marizapa", "Panaquire", "Ribas"],
     "Andrés Bello": ["San José de Barlovento", "Cumbo"],
     "Baruta": ["Nuestra Señora del Rosario de Baruta", "El Cafetal", "Las Minas de Baruta"],
     "Brión": ["Higuerote", "Curiepe", "Tacarigua de Mamporal"],
@@ -59,7 +59,7 @@ const ubicacionesVenezuela = {
     "Juan Antonio Sotillo": ["Puerto La Cruz", "Pozuelos"]
   },
   "Distrito Capital": {
-    "Libertador": ["23 de Enero", "Altagracia", "Antímano", "Caricuao", "Catedral", "Coche", "El Junquito", "El Paraíso", "El Recreo", "El Valle", "La Candelaria", "La Pastora", "La Vega", "Macarao", "San Agustín", "San Bernardino", "San José", "San Juan", "Santa Rosalía",  "Santa Teresa", "Sucre (Catia)", "El Recreo"]
+    "Libertador": ["23 de Enero", "Altagracia", "Antímano", "Caricuao", "Catedral", "Coche", "El Junquito", "El Paraíso", "El Recreo", "El Valle", "La Candelaria", "La Pastora", "La Vega", "Macarao", "San Agustín", "San Bernardino", "San José", "San Juan", "Santa Rosalía", "Santa Teresa", "Sucre (Catia)", "El Recreo"]
   },
   "La Guaira": {
     "Vargas": ["La Guaira", "Maiquetía", "Catia La Mar", "Caraballeda", "Macuto"]
@@ -127,24 +127,23 @@ selectMunicipio?.addEventListener('change', () => {
 
 // 5. CARGAR DATOS SI ESTAMOS EN MODO EDICIÓN
 if (editBusId) {
-  document.addEventListener('DOMContentLoaded', async () => {
+  (async () => {
     try {
       const { data: bus } = await axios.get(`/api/buses/${editBusId}`, { withCredentials: true });
 
       if (inputNumeroBus) inputNumeroBus.value = bus.numeroBus ?? '';
-      if (inputPlaca) inputPlaca.value = bus.placa ?? '';
+      if (inputFoto) inputFoto.value = bus.foto ?? ''; // Carga el valor de la foto
       if (inputNombre) inputNombre.value = bus.nombreEntidad ?? '';
       if (inputNinos) inputNinos.value = bus.cantidadNinos ?? 0;
       if (inputAdultos) inputAdultos.value = bus.cantidadAdultos ?? 0;
 
-      // Lógica para Estados -> Municipios -> Parroquias
       if (selectEstado && bus.estado) {
         selectEstado.value = bus.estado;
-        selectEstado.dispatchEvent(new Event('change')); // Dispara el evento para poblar municipios
+        selectEstado.dispatchEvent(new Event('change'));
 
         if (selectMunicipio && bus.municipio) {
           selectMunicipio.value = bus.municipio;
-          selectMunicipio.dispatchEvent(new Event('change')); // Dispara el evento para poblar parroquias
+          selectMunicipio.dispatchEvent(new Event('change'));
 
           if (selectParroquia && bus.parroquia) {
             selectParroquia.value = bus.parroquia;
@@ -152,7 +151,6 @@ if (editBusId) {
         }
       }
 
-      // Cambiar texto del botón principal
       const btnSubmit = busForm?.querySelector('button[type="submit"]');
       if (btnSubmit) btnSubmit.textContent = 'Guardar Cambios';
 
@@ -160,7 +158,7 @@ if (editBusId) {
       console.error('Error al obtener datos del bus:', error);
       createNotification(true, 'No se pudieron cargar los datos del bus');
     }
-  });
+  })();
 }
 
 // 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
@@ -169,50 +167,73 @@ busForm?.addEventListener('submit', async (e) => {
 
   try {
     let nombreFinal = inputNombre ? inputNombre.value.trim() : '';
-    
-    // Si la clasificación es colegio y hay iniciales seleccionadas
+
     if (selectClasificacion?.value === 'colegio' && selectIniciales?.value) {
       nombreFinal = `${selectIniciales.value} ${nombreFinal}`;
     }
 
-    // Tomamos la parroquia elegida o la del bus original como respaldo
     const parroquiaValor = selectParroquia?.value || '';
 
-    const busPayload = {
-      numeroBus: Number(inputNumeroBus?.value || 0),
-      placa: inputPlaca?.value ? inputPlaca.value.toUpperCase().trim() : '',
-      nombreEntidad: nombreFinal,
-      lugarEntidad: parroquiaValor,
-      estado: selectEstado?.value || '',
-      municipio: selectMunicipio?.value || '',
-      parroquia: parroquiaValor,
-      cantidadNinos: Number(inputNinos?.value || 0),
-      cantidadAdultos: Number(inputAdultos?.value || 0)
-    };
+    // Usamos FormData porque estamos enviando un archivo (la foto de la cámara)
+    const inputFoto = document.querySelector('#foto'); // Asegúrate de tener esta constante arriba en tu archivo
 
-    if (editBusId) {
-      // ✏️ Enviar actualización mediante PUT
-      await axios.put(`/api/buses/${editBusId}`, busPayload, { withCredentials: true });
-      createNotification(false, 'Bus editado exitosamente');
-    } else {
-      // ➕ Enviar creación mediante POST
-      await axios.post('/api/buses', busPayload, { withCredentials: true });
-      createNotification(false, 'Bus guardado exitosamente');
-    }
+    busForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    // Redirigir a la lista
-    setTimeout(() => {
+      try {
+        let nombreFinal = inputNombre ? inputNombre.value.trim() : '';
+
+        // Si la clasificación es colegio y hay iniciales seleccionadas
+        if (selectClasificacion?.value === 'colegio' && selectIniciales?.value) {
+          nombreFinal = `${selectIniciales.value} ${nombreFinal}`;
+        }
+
+        const parroquiaValor = selectParroquia?.value || '';
+        const formData = new FormData();
+
+        // Usamos FormData para empaquetar los textos y el archivo de la cámara
+        formData.append('numeroBus', Number(inputNumeroBus?.value || 0));
+        formData.append('nombreEntidad', nombreFinal);
+        formData.append('lugarEntidad', parroquiaValor);
+        formData.append('estado', selectEstado?.value || '');
+        formData.append('municipio', selectMunicipio?.value || '');
+        formData.append('parroquia', parroquiaValor);
+        formData.append('cantidadNinos', Number(inputNinos?.value || 0));
+        formData.append('cantidadAdultos', Number(inputAdultos?.value || 0));
+
+        // Adjuntamos la foto tomada por la cámara si el usuario la seleccionó
+        if (inputFoto?.files[0]) {
+          formData.append('foto', inputFoto.files[0]);
+        }
+
+        if (editBusId) {
+          // ✏️ Enviar actualización mediante PUT (Axios maneja FormData automáticamente)
+          await axios.put(`/api/buses/${editBusId}`, formData, { withCredentials: true });
+          createNotification(false, 'Bus editado exitosamente');
+        } else {
+          // ➕ Enviar creación mediante POST
+          await axios.post('/api/buses', formData, { withCredentials: true });
+          createNotification(false, 'Bus guardado exitosamente');
+        }
+
+        // Redirigir a la lista de buses
+        setTimeout(() => {
+          window.location.pathname = '/listBuses/';
+        }, 1200);
+
+      } catch (error) {
+        console.error('Error al procesar el bus:', error);
+        const mensajeError = error.response?.data?.error || 'Error al guardar los cambios del bus';
+        createNotification(true, mensajeError);
+      }
+    });
+
+    // Botón de regresar
+    btnBack?.addEventListener('click', () => {
       window.location.pathname = '/listBuses/';
-    }, 1200);
-
+    });
   } catch (error) {
     console.error('Error al procesar el bus:', error);
-    const mensajeError = error.response?.data?.error || 'Error al guardar los cambios del bus';
-    createNotification(true, mensajeError);
-  }
-});
-
-// Botón de regresar
-btnBack?.addEventListener('click', () => {
-  window.location.pathname = '/listBuses/';
+    createNotification(true, 'Error al guardar los cambios del bus');
+  } 
 });

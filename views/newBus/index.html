@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nuevo Bus - ControlPass</title>
-  <link rel="stylesheet" href="themes.css">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -20,15 +19,16 @@
     <main class="main-content">
       <form id="bus-form" class="bus-form">
 
-        <!-- Número de Bus y Placa -->
+        <!-- Número de Bus y Foto (Cámara Directa) -->
         <div class="form-row">
           <div class="form-group">
             <label for="numeroBus">Bus</label>
             <input type="number" id="numeroBus" placeholder="Número de Bus" required min="1">
           </div>
           <div class="form-group">
-            <label for="placa">Placa</label>
-            <input type="text" id="placa" placeholder="Placa" required style="text-transform: uppercase;">
+            <label for="foto">Tomar Foto del Bus</label>
+            <!-- capture="environment" abre la cámara trasera directamente en móviles -->
+            <input type="file" id="foto" accept="image/*" capture="environment" required>
           </div>
         </div>
 
@@ -49,17 +49,17 @@
           <label for="inicialesColegio">Iniciales del colegio</label>
           <select id="inicialesColegio" disabled>
             <option value="" disabled selected>Elegir qué tipo de colegio es</option>
-            <option value="U.E.N.">U.E.N.</option>
-            <option value="U.E.E.">U.E.E.</option>
-            <option value="U.E.P.">U.E.P.</option>
-            <option value="U.E.M.">U.E.M.</option>
-            <option value="L.N.">L.N.</option>
-            <option value="C.E.I.P.">C.E.I.P.</option>
-            <option value="E.B.N. / E.B.E.">E.B.N. / E.B.E.</option>
-            <option value="C.E.I.N.">C.E.I.N.</option>
-            <option value="U.E.A.">U.E.A.</option>
-            <option value="U.E.P.A.">U.E.P.A.</option>
-            <option value="E.T.N. / E.T.C.R.">E.T.N. / E.T.C.R.</option>
+            <option value="U.E.N.">U.E.N. (Unidad Educativa Nacional)</option>
+            <option value="U.E.E.">U.E.E. (Unidad Educativa Estadal)</option>
+            <option value="U.E.P.">U.E.P. (Unidad Educativa Privada)</option>
+            <option value="U.E.M.">U.E.M. (Unidad Educativa Municipal)</option>
+            <option value="L.N.">L.N. (Liceo Nacional)</option>
+            <option value="C.E.I.P.">C.E.I.P. (Centro de Educación Infantil y Primaria)</option>
+            <option value="E.B.N. / E.B.E.">E.B.N. / E.B.E. (Escuela de Bellas Artes / Escuela de Bellas Artes)</option>
+            <option value="C.E.I.N.">C.E.I.N. (Centro de Educación Inicial Nacional)</option>
+            <option value="U.E.A.">U.E.A. (Unidad Educativa Agrícola)</option>
+            <option value="U.E.P.A.">U.E.P.A. (Unidad Educativa Privada)</option>
+            <option value="E.T.N. / E.T.C.R.">E.T.N. / E.T.C.R. (Escuela Técnica Nacional / Escuela Técnica de Capacitación Rural)</option>
           </select>
         </div>
 

@@ -1,6 +1,5 @@
 const adminSection = document.querySelector('#admin-section');
 const roleBadge = document.querySelector('#user-role-badge');
-const btnLogout = document.querySelector('#btn-logout');
 const themeToggle = document.querySelector('#theme-toggle');
 
   // Botones de administración
@@ -26,18 +25,6 @@ import { createConfirmation } from '../components/alerts.js';
     // Si la sesión no es válida o expiró, redirigimos al login
     window.location.href = '/';
   }
-
-  // 2. Lógica para Cerrar Sesión
-  btnLogout.addEventListener('click', async () => {
-    try {
-      // Petición al backend para limpiar la cookie de sesión
-      await axios.post('/api/logout');
-      window.location.href = '/';
-    } catch (error) {
-      // Si no existe el endpoint /api/logout, forzamos redirección
-      window.location.href = '/';
-    }
-  });
 
   // 3. Lógica para el Modo Oscuro (Persistencia en LocalStorage)
   const savedTheme = localStorage.getItem('theme');

@@ -2,6 +2,7 @@ const busListContainer = document.querySelector('#bus-list');
 const emptyState = document.querySelector('#empty-state');
 const btnConfig = document.querySelector('#btn-config');
 const btnNewBus = document.querySelector('#btn-new-bus');
+const btnLogout = document.getElementById('btn-logout');
 const userAvatar = document.querySelector('#user-avatar');
 
 
@@ -18,13 +19,18 @@ const canEditOrDelete = (bus) => {
   return activeUserName === busOwner;
 };
 
-// 1. LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
+// LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
 const optionspress = (cardElement, bus) => {
   let timer;
 
-  const startPress = () => {
-    // Si no es el creador directo del bus, no se activa el menú
-    if (!canEditOrDelete(bus)) return;
+  const startPress = (e) => {
+    // Depuración: abre tu consola (F12) para ver si pasa esta validación
+    console.log("Usuario actual:", currentUser?.name, "Propietario del bus:", bus.usuario);
+    
+    if (!canEditOrDelete(bus)) {
+      console.log("No tienes permisos para editar este bus.");
+      return;
+    }
 
     timer = setTimeout(() => {
       mostrarOpcionesBus(bus, cardElement);
@@ -37,14 +43,14 @@ const optionspress = (cardElement, bus) => {
 
   cardElement.addEventListener('touchstart', startPress);
   cardElement.addEventListener('touchend', cancelPress);
-  cardElement.addEventListener('touchmove', cancelPress);
+  // Eliminamos 'touchmove' o lo hacemos más flexible para evitar que se cancele al temblor del dedo
 
   cardElement.addEventListener('mousedown', startPress);
   cardElement.addEventListener('mouseup', cancelPress);
   cardElement.addEventListener('mouseleave', cancelPress);
 };
 
-// 2. MOSTRAR MENÚ FLOTANTE DE OPCIONES (EDITAR / ELIMINAR)
+// MOSTRAR MENÚ FLOTANTE DE OPCIONES (EDITAR / ELIMINAR)
 const mostrarOpcionesBus = (bus, cardElement) => {
   const existingMenu = document.querySelector('.bus-options-menu');
   if (existingMenu) existingMenu.remove();
@@ -115,13 +121,18 @@ const createBusCard = (bus) => {
   return article;
 };
 
-// 4. CARGA INICIAL DE DATOS (AUTOEJECUTABLE ASYNC)
+// CARGA INICIAL DE DATA Y USUARIO
 (async () => {
   try {
-    currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const storedUser = localStorage.getItem('currentUser');
+    console.log("Objeto crudo en localStorage:", storedUser);
 
-    if (userAvatar && currentUser && currentUser.name) {
-      userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+    currentUser = storedUser ? JSON.parse(storedUser) : null;
+    console.log("Usuario parseado:", currentUser);
+
+    if (userAvatar && currentUser && (currentUser.name || currentUser.username)) {
+      const name = currentUser.name || currentUser.username;
+      userAvatar.textContent = name.charAt(0).toUpperCase();
     }
 
     const { data: buses } = await axios.get('/api/buses', { withCredentials: true });
@@ -142,7 +153,31 @@ const createBusCard = (bus) => {
   }
 })();
 
-// 5. EVENTOS DE NAVEGACIÓN
+// EVENTO DE CIERRE DE SESIÓN
+if (btnLogout) {
+  btnLogout.addEventListener('click', async () => {
+    try {
+      // Petición al backend para borrar la cookie de sesión
+      await axios.get('/api/logout', { withCredentials: true });
+      
+      // Limpiar datos locales si los hubiera
+      localStorage.removeItem('currentUser');
+
+      // Redirigir al usuario al login
+      window.location.pathname = '/'; 
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      
+      if (error.response && error.response.status === 401) {
+        window.location.pathname = '/';
+      } else {
+        alert('Hubo un problema al intentar cerrar sesión.');
+      }
+    }
+  });
+}
+
+// EVENTOS DE NAVEGACIÓN
 btnNewBus.addEventListener('click', () => {
   window.location.pathname = '/newBus';
 });
