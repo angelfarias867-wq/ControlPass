@@ -132,7 +132,6 @@ if (editBusId) {
       const { data: bus } = await axios.get(`/api/buses/${editBusId}`, { withCredentials: true });
 
       if (inputNumeroBus) inputNumeroBus.value = bus.numeroBus ?? '';
-      if (inputFoto) inputFoto.value = bus.foto ?? ''; // Carga el valor de la foto
       if (inputNombre) inputNombre.value = bus.nombreEntidad ?? '';
       if (inputNinos) inputNinos.value = bus.cantidadNinos ?? 0;
       if (inputAdultos) inputAdultos.value = bus.cantidadAdultos ?? 0;
@@ -161,7 +160,7 @@ if (editBusId) {
   })();
 }
 
-// 6. UN SOLO UNIFICADO SUBMIT (POST O PUT)
+// 6. EVENTO SUBMIT ÚNICO Y LIMPIO PARA POST O PUT
 busForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -173,67 +172,43 @@ busForm?.addEventListener('submit', async (e) => {
     }
 
     const parroquiaValor = selectParroquia?.value || '';
+    const formData = new FormData();
 
-    // Usamos FormData porque estamos enviando un archivo (la foto de la cámara)
-    const inputFoto = document.querySelector('#foto'); // Asegúrate de tener esta constante arriba en tu archivo
+    formData.append('numeroBus', Number(inputNumeroBus?.value || 0));
+    formData.append('entidad', selectClasificacion?.value || '');
+    formData.append('nombreEntidad', nombreFinal);
+    formData.append('lugarEntidad', parroquiaValor);
+    formData.append('estado', selectEstado?.value || '');
+    formData.append('municipio', selectMunicipio?.value || '');
+    formData.append('parroquia', parroquiaValor);
+    formData.append('cantidadNinos', Number(inputNinos?.value || 0));
+    formData.append('cantidadAdultos', Number(inputAdultos?.value || 0));
 
-    busForm?.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Adjuntamos la foto de la cámara correctamente
+    if (inputFoto?.files[0]) {
+      formData.append('foto', inputFoto.files[0]);
+    }
 
-      try {
-        let nombreFinal = inputNombre ? inputNombre.value.trim() : '';
+    if (editBusId) {
+      await axios.put(`/api/buses/${editBusId}`, formData, { withCredentials: true });
+      createNotification(false, 'Bus editado exitosamente');
+    } else {
+      await axios.post('/api/buses', formData, { withCredentials: true });
+      createNotification(false, 'Bus guardado exitosamente');
+    }
 
-        // Si la clasificación es colegio y hay iniciales seleccionadas
-        if (selectClasificacion?.value === 'colegio' && selectIniciales?.value) {
-          nombreFinal = `${selectIniciales.value} ${nombreFinal}`;
-        }
-
-        const parroquiaValor = selectParroquia?.value || '';
-        const formData = new FormData();
-
-        // Usamos FormData para empaquetar los textos y el archivo de la cámara
-        formData.append('numeroBus', Number(inputNumeroBus?.value || 0));
-        formData.append('nombreEntidad', nombreFinal);
-        formData.append('lugarEntidad', parroquiaValor);
-        formData.append('estado', selectEstado?.value || '');
-        formData.append('municipio', selectMunicipio?.value || '');
-        formData.append('parroquia', parroquiaValor);
-        formData.append('cantidadNinos', Number(inputNinos?.value || 0));
-        formData.append('cantidadAdultos', Number(inputAdultos?.value || 0));
-
-        // Adjuntamos la foto tomada por la cámara si el usuario la seleccionó
-        if (inputFoto?.files[0]) {
-          formData.append('foto', inputFoto.files[0]);
-        }
-
-        if (editBusId) {
-          // ✏️ Enviar actualización mediante PUT (Axios maneja FormData automáticamente)
-          await axios.put(`/api/buses/${editBusId}`, formData, { withCredentials: true });
-          createNotification(false, 'Bus editado exitosamente');
-        } else {
-          // ➕ Enviar creación mediante POST
-          await axios.post('/api/buses', formData, { withCredentials: true });
-          createNotification(false, 'Bus guardado exitosamente');
-        }
-
-        // Redirigir a la lista de buses
-        setTimeout(() => {
-          window.location.pathname = '/listBuses/';
-        }, 1200);
-
-      } catch (error) {
-        console.error('Error al procesar el bus:', error);
-        const mensajeError = error.response?.data?.error || 'Error al guardar los cambios del bus';
-        createNotification(true, mensajeError);
-      }
-    });
-
-    // Botón de regresar
-    btnBack?.addEventListener('click', () => {
+    setTimeout(() => {
       window.location.pathname = '/listBuses/';
-    });
+    }, 1200);
+
   } catch (error) {
     console.error('Error al procesar el bus:', error);
-    createNotification(true, 'Error al guardar los cambios del bus');
-  } 
+    const mensajeError = error.response?.data?.error || 'Error al guardar los cambios del bus';
+    createNotification(true, mensajeError);
+  }
+});
+
+// Botón de regresar
+btnBack?.addEventListener('click', () => {
+  window.location.pathname = '/listBuses/';
 });

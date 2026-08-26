@@ -26,7 +26,7 @@ const optionspress = (cardElement, bus) => {
   const startPress = (e) => {
     // Depuración: abre tu consola (F12) para ver si pasa esta validación
     console.log("Usuario actual:", currentUser?.name, "Propietario del bus:", bus.usuario);
-    
+
     if (!canEditOrDelete(bus)) {
       console.log("No tienes permisos para editar este bus.");
       return;
@@ -104,11 +104,15 @@ const createBusCard = (bus) => {
   article.classList.add('bus-card');
 
   article.innerHTML = `
+    <!-- FOTO DEL BUS (Se muestra solo si existe la ruta) -->
+    ${bus.foto ? `<div class="bus-photo-container" style="margin: 8px 0;"><img src="/${bus.foto}" alt="Foto del bus" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;"></div>` : ''}
+
     <h2 class="driver-name">${bus.usuario}</h2>
+
     <div class="card-row">
-      <span>N: ${bus.numeroBus}</span>
-      <span>Placa: ${bus.placa}</span>
-    </div>
+  <span>N: ${bus.numeroBus}</span>
+  <span>${bus.entidad ? bus.entidad.toUpperCase() : ''}</span>
+</div>
     <p class="institution">${bus.nombreEntidad} (${bus.lugarEntidad})</p>
     <div class="card-row metrics">
       <span>Niños: ${bus.cantidadNinos}</span>
@@ -159,15 +163,15 @@ if (btnLogout) {
     try {
       // Petición al backend para borrar la cookie de sesión
       await axios.get('/api/logout', { withCredentials: true });
-      
+
       // Limpiar datos locales si los hubiera
       localStorage.removeItem('currentUser');
 
       // Redirigir al usuario al login
-      window.location.pathname = '/'; 
+      window.location.pathname = '/';
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
-      
+
       if (error.response && error.response.status === 401) {
         window.location.pathname = '/';
       } else {

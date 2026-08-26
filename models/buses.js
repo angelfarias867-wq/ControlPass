@@ -10,11 +10,12 @@ const busSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    placa: {
+    foto: {
+    type: String
+    },
+    entidad: {
         type: String,
-        required: true,
-        uppercase: true,
-        trim: true
+        required: true
     },
     nombreEntidad: {
         type: String,

@@ -34,6 +34,7 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
+
 //Rutas Frontend
 app.use("/", express.static(path.resolve("views", "login")));
 app.use('/signup', express.static(path.resolve('views','signup')));
@@ -46,6 +47,7 @@ app.use('/finalReport', express.static(path.resolve('views', 'configuration','fi
 app.use('/permissionVerification', express.static(path.resolve('views', 'configuration','permissionVerification')));
 app.use('/components', express.static(path.resolve('views','components')));
 app.use('/img', express.static(path.resolve('img')));
+app.use('/uploads', express.static('uploads'));
 
 
 //Rutas backend

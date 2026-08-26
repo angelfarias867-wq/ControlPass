@@ -1,12 +1,16 @@
 const busesRouter = require("express").Router();
 const User = require("../models/user");
 const Bus = require("../models/buses");
+const upload = require("../middleware/multer");
 
 // Obtener todos los buses registrados
 busesRouter.get("/", async (request, response) => {
-  const user = request.user;
-  const buses = await Bus.find({});
-  return response.status(200).json(buses);
+  try {
+    const buses = await Bus.find({});
+    return response.status(200).json(buses);
+  } catch (error) {
+    return response.status(500).json({ error: "Error al obtener los buses" });
+  }
 });
 
 // Endpoint para obtener el reporte momentáneo de todos los buses
@@ -47,28 +51,35 @@ busesRouter.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo bus
-busesRouter.post("/", async (request, response) => {
+busesRouter.post("/", upload.single('foto'), async (request, response) => {
   try {
     const user = request.user;
-
     if (!user) {
-      return response.status(401).json({ 
-        error: "No estás autenticado o la sesión expiró" 
-      });
+      return response.status(401).json({ error: "No estás autenticado" });
     }
 
-    // Muestra en la consola de Node qué trae exactamente el token
-    console.log("Datos del usuario en la sesión:", user);
-
-    const { numeroBus, placa, nombreEntidad, lugarEntidad, cantidadNinos, cantidadAdultos } = request.body;
-
-    const newBus = new Bus({
-      // Busca 'name' o 'username', si no los encuentra usa 'Usuario' por defecto
-      usuario: user.name || user.username || "Usuario",
+    const {
       numeroBus,
-      placa,
+      entidad,
       nombreEntidad,
       lugarEntidad,
+      estado,
+      municipio,
+      parroquia,
+      cantidadNinos,
+      cantidadAdultos
+    } = request.body;
+
+    const newBus = new Bus({
+      usuario: user.name || user.username || "Usuario",
+      numeroBus,
+      foto: request.file ? request.file.path : undefined,
+      entidad: request.body.entidad || "Entidad no especificada",
+      nombreEntidad,
+      lugarEntidad,
+      estado,
+      municipio,
+      parroquia,
       cantidadNinos,
       cantidadAdultos
     });
@@ -97,7 +108,6 @@ busesRouter.delete("/:id", async (request, response) => {
 
     const currentUserName = user.name || user.username;
 
-    // VALIDACIÓN ESTRICTA: Solo si el nombre de usuario coincide exactamente
     if (bus.usuario !== currentUserName) {
       return response.status(403).json({ error: "No tienes permiso para eliminar este bus porque no lo creaste tú" });
     }
@@ -110,7 +120,7 @@ busesRouter.delete("/:id", async (request, response) => {
 });
 
 // Actualizar/Editar un bus por ID (Únicamente el creador del bus)
-busesRouter.put('/:id', async (req, res) => {
+busesRouter.put('/:id', upload.single('foto'), async (req, res) => {
   try {
     const user = req.user;
     if (!user) {
@@ -126,15 +136,44 @@ busesRouter.put('/:id', async (req, res) => {
 
     const currentUserName = user.name || user.username;
 
-    // VALIDACIÓN ESTRICTA: Solo si el nombre de usuario coincide exactamente
     if (bus.usuario !== currentUserName) {
       return res.status(403).json({ error: "No tienes permiso para editar este bus porque no lo creaste tú" });
     }
 
-    const busActualizado = await Bus.findByIdAndUpdate(id, req.body, { new: true });
+    const {
+      numeroBus,
+      entidad,
+      nombreEntidad,
+      lugarEntidad,
+      estado,
+      municipio,
+      parroquia,
+      cantidadNinos,
+      cantidadAdultos
+    } = req.body;
+
+    const datosActualizados = {
+      numeroBus,
+      entidad, 
+      nombreEntidad,
+      lugarEntidad,
+      estado,
+      municipio,
+      parroquia,
+      cantidadNinos,
+      cantidadAdultos
+    };
+
+    // Si el usuario subió una nueva foto al editar, la actualizamos
+    if (req.file) {
+      datosActualizados.foto = req.file.path;
+    }
+
+    const busActualizado = await Bus.findByIdAndUpdate(id, datosActualizados, { new: true });
     return res.status(200).json(busActualizado);
   } catch (error) {
-    return res.status(500).json({ error: 'Error al actualizar el bus' });
+    console.error("Error al actualizar el bus:", error);
+    return response.status(500).json({ error: 'Error al actualizar el bus' });
   }
 });
 
