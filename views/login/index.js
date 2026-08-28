@@ -12,16 +12,21 @@ form.addEventListener("submit", async (e) => {
       email: emailImput.value,
       password: passwordInput.value
     };
-    const { data } = await axios.post("/api/login", user);
 
-    if (data.user) {
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-    }
+    // 1. Hacemos la petición al login
+    const { data } = await axios.post("/api/users/login", user); 
+    // (O /api/login según como tengas definida tu ruta)
+
+    // 2. Guardamos directamente la respuesta del backend
+    localStorage.setItem('currentUser', JSON.stringify(data));
+    
     if (data.role) {
       localStorage.setItem("role", data.role);
     }
 
+    // 3. Redirigimos
     window.location.pathname = data.redirectUrl || '/listBuses/';
+
   } catch (error) {
     createNotification("Usuario/contraseña incorrectos o permiso no autorizado", "error");
     console.log(error);

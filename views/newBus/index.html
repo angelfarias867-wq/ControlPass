@@ -29,8 +29,9 @@
           </div>
           <div class="form-group">
             <label for="foto">Tomar Foto del Bus</label>
-            <!-- capture="environment" abre la cámara trasera directamente en móviles -->
-            <input type="file" id="foto" accept="image/*" capture="environment" required>
+            <input type="file" id="foto" accept="image/*" capture="environment">
+            <img id="preview-foto" src="" alt="Foto actual del bus"
+              style="display:none; width: 100%; max-height: 150px; object-fit: cover; margin-top: 8px; border-radius: 6px;">
           </div>
         </div>
 

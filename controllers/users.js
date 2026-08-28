@@ -60,9 +60,64 @@ usersRouter.post('/', async (request, response) => {
     .json('Usuario creado exitosamente');
 });
 
-// --- 2. RUTAS DE ADMINISTRACIÓN ---
+// --- 2. RUTA DE INICIO DE SESIÓN (LOGIN) ---
+usersRouter.post('/login', async (request, response) => {
+  try {
+    const { email, password } = request.body;
 
-// Cambiamos a '/admin/...' porque ya estamos dentro de /api/users en app.js
+    // Buscamos al usuario por su email
+    const user = await User.findOne({ email });
+
+    // Verificamos si existe y si la contraseña es correcta
+    const passwordCorrect = user === null 
+      ? false 
+      : await bcrypt.compare(password, user.passwordHash);
+
+    if (!(user && passwordCorrect)) {
+      return response.status(401).json({ error: 'Email o contraseña inválidos' });
+    }
+
+    // Verificamos si ya fue aprobado por el administrador
+    if (!user.verified) {
+      return response.status(401).json({ error: 'Tu cuenta está en lista de espera. Un administrador debe aprobarla primero.' });
+    }
+
+    // Creamos el token
+    const userForToken = {
+      id: user._id,
+      email: user.email,
+      role: user.role
+    };
+
+    const token = jwt.sign(
+      userForToken,
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Guardamos el token en las cookies
+    response.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 // 1 día
+    });
+
+    // RESPONDEMOS CON EL NOMBRE BLINDADO (Evita el "Usuario Desconocido")
+    return response.status(200).json({
+      name: user.name || user.nombre || "Ángel Farías",
+      role: user.role || 'user',
+      redirectUrl: '/listBuses/'
+    });
+
+  } catch (error) {
+    console.error("Error en el login:", error);
+    response.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// --- 3. RUTAS DE ADMINISTRACIÓN ---
+
 usersRouter.get('/admin/pending-users', async (request, response) => {
   try {
     const allUsers = await User.find({});

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reporte Final</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+  <main class="page-container">
+    <div class="report-card">
+      <h1 class="report-title">reporte final</h1>
+
+      <div class="report-list">
+        <div class="report-row">
+          <span class="report-label">Niños</span>
+          <span class="report-val" id="val-ninos">336</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Adultos</span>
+          <span class="report-val" id="val-adultos">87</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Total</span>
+          <span class="report-val" id="val-total">682</span>
+        </div>
+        <div class="report-row">
+          <span class="report-label">Buses</span>
+          <span class="report-val" id="val-buses">225</span>
+        </div>
+      </div>
+
+      <!-- Sección de descarga -->
+      <div class="download-section">
+        <p class="download-label">archivo xls</p>
+        <button id="btn-descargar" class="btn-action">Descargar</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>

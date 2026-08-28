@@ -11,7 +11,7 @@ const busSchema = new mongoose.Schema({
         required: true
     },
     foto: {
-    type: String
+        type: String
     },
     entidad: {
         type: String,
@@ -24,6 +24,18 @@ const busSchema = new mongoose.Schema({
     lugarEntidad: {
         type: String,
         required: true
+    },
+    estado: {
+        type: String,
+        required: true // Agregado para almacenar el Estado de Venezuela
+    },
+    municipio: {
+        type: String,
+        required: true // Agregado para almacenar el Municipio
+    },
+    parroquia: {
+        type: String,
+        required: false // Opcional o respaldo de lugarEntidad
     },
     cantidadNinos: {
         type: Number,

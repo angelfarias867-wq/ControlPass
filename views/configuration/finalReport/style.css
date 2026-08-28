@@ -1,0 +1,117 @@
+/* --- PALETA DE COLORES --- */
+:root {
+  --bg-body: #0b141a;
+  --bg-card: #111b21;
+  --text-main: #e9edef;
+  --border-color: #3b4a54;
+  --btn-hover-bg: #202c33;
+  --accent-color: #00a884;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', cursive, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  justify-content: center;
+}
+
+.report-card {
+  width: 100%;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 2rem;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.report-title {
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.report-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-label {
+  font-size: 1.3rem;
+}
+
+.report-val {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* --- Sección de descarga --- */
+.download-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.download-label {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* --- Botón de acción (Volver / Descargar) --- */
+.btn-action {
+  display: inline-block;
+  width: 70%;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  color: var(--text-main);
+  border: 2px solid var(--border-color);
+  border-radius: 1.2rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-action:hover {
+  background-color: var(--btn-hover-bg);
+  border-color: var(--accent-color);
+}
+
+.btn-action:active {
+  transform: scale(0.98);
+}

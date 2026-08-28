@@ -11,13 +11,14 @@ const selectMunicipio = document.querySelector('#municipio');
 const selectParroquia = document.querySelector('#parroquia');
 const inputNinos = document.querySelector('#cantidadNinos');
 const inputAdultos = document.querySelector('#cantidadAdultos');
+const previewFoto = document.querySelector('#preview-foto');
 
 const urlParams = new URLSearchParams(window.location.search);
 const editBusId = urlParams.get('edit');
 
 import { createNotification } from '../components/notifications.js';
 
-// Base de datos local para Estados, Municipios y Parroquias
+// Base de datos local idéntica a tus options del HTML
 const ubicacionesVenezuela = {
   "Carabobo": {
     "Valencia": ["San José", "Naguanagua", "Miguel Peña", "Rafael Urdaneta"],
@@ -50,16 +51,16 @@ const ubicacionesVenezuela = {
     "Urdaneta": ["Cúa", "Nueva Cúa"],
     "Zamora": ["Guatire", "Bolívar"]
   },
-  "Guarico": {
+  "Guárico": {
     "Juan Germán Roscio": ["San Juan de los Morros", "Parapara"],
     "Infante": ["Valle de la Pascua", "Espino"]
   },
-  "Anzoategui": {
+  "Anzoátegui": {
     "Simón Bolívar": ["Barcelona", "El Carmen", "San Cristóbal"],
     "Juan Antonio Sotillo": ["Puerto La Cruz", "Pozuelos"]
   },
   "Distrito Capital": {
-    "Libertador": ["23 de Enero", "Altagracia", "Antímano", "Caricuao", "Catedral", "Coche", "El Junquito", "El Paraíso", "El Recreo", "El Valle", "La Candelaria", "La Pastora", "La Vega", "Macarao", "San Agustín", "San Bernardino", "San José", "San Juan", "Santa Rosalía", "Santa Teresa", "Sucre (Catia)", "El Recreo"]
+    "Libertador": ["23 de Enero", "Altagracia", "Antímano", "Caricuao", "Catedral", "Coche", "El Junquito", "El Paraíso", "El Recreo", "El Valle", "La Candelaria", "La Pastora", "La Vega", "Macarao", "San Agustín", "San Bernardino", "San José", "San Juan", "Santa Rosalía", "Santa Teresa", "Sucre (Catia)"]
   },
   "La Guaira": {
     "Vargas": ["La Guaira", "Maiquetía", "Catia La Mar", "Caraballeda", "Macuto"]
@@ -130,24 +131,95 @@ if (editBusId) {
   (async () => {
     try {
       const { data: bus } = await axios.get(`/api/buses/${editBusId}`, { withCredentials: true });
+      console.log("Datos del bus recibidos para editar:", bus);
 
       if (inputNumeroBus) inputNumeroBus.value = bus.numeroBus ?? '';
-      if (inputNombre) inputNombre.value = bus.nombreEntidad ?? '';
+      
+      if (selectClasificacion && bus.entidad) {
+        selectClasificacion.value = bus.entidad;
+        selectClasificacion.dispatchEvent(new Event('change'));
+      }
+
+      // Separar iniciales y nombre si es colegio
+      if (inputNombre) {
+        let nombreCompleto = bus.nombreEntidad || '';
+        
+        if (bus.entidad === 'colegio' && selectIniciales) {
+          const opcionesIniciales = Array.from(selectIniciales.options).map(opt => opt.value).filter(Boolean);
+          const inicialEncontrada = opcionesIniciales.find(init => nombreCompleto.startsWith(init));
+          
+          if (inicialEncontrada) {
+            selectIniciales.value = inicialEncontrada;
+            selectIniciales.disabled = false;
+            selectIniciales.required = true;
+            nombreCompleto = nombreCompleto.replace(inicialEncontrada, '').trim();
+          }
+        }
+        
+        inputNombre.value = nombreCompleto;
+      }
+
       if (inputNinos) inputNinos.value = bus.cantidadNinos ?? 0;
       if (inputAdultos) inputAdultos.value = bus.cantidadAdultos ?? 0;
 
-      if (selectEstado && bus.estado) {
-        selectEstado.value = bus.estado;
-        selectEstado.dispatchEvent(new Event('change'));
+      // RECUPERAR UBICACIÓN
+      let estadoGuardado = bus.estado;
+      let municipioGuardado = bus.municipio;
+      const parroquiaGuardada = bus.parroquia || bus.lugarEntidad;
 
-        if (selectMunicipio && bus.municipio) {
-          selectMunicipio.value = bus.municipio;
-          selectMunicipio.dispatchEvent(new Event('change'));
+      if ((!estadoGuardado || !municipioGuardado) && parroquiaGuardada) {
+        for (const [est, munObj] of Object.entries(ubicacionesVenezuela)) {
+          for (const [mun, parras] of Object.entries(munObj)) {
+            if (parras.includes(parroquiaGuardada)) {
+              estadoGuardado = est;
+              municipioGuardado = mun;
+              break;
+            }
+          }
+          if (estadoGuardado) break;
+        }
+      }
 
-          if (selectParroquia && bus.parroquia) {
-            selectParroquia.value = bus.parroquia;
+      if (selectEstado && estadoGuardado) {
+        selectEstado.value = estadoGuardado;
+        
+        if (ubicacionesVenezuela[estadoGuardado]) {
+          selectMunicipio.innerHTML = '<option value="" disabled selected>Elige el municipio</option>';
+          Object.keys(ubicacionesVenezuela[estadoGuardado]).forEach(mun => {
+            const option = document.createElement('option');
+            option.value = mun;
+            option.textContent = mun;
+            selectMunicipio.appendChild(option);
+          });
+          selectMunicipio.disabled = false;
+        }
+
+        if (selectMunicipio && municipioGuardado) {
+          selectMunicipio.value = municipioGuardado;
+
+          if (ubicacionesVenezuela[estadoGuardado]?.[municipioGuardado]) {
+            selectParroquia.innerHTML = '<option value="" disabled selected>Elige la parroquia</option>';
+            ubicacionesVenezuela[estadoGuardado][municipioGuardado].forEach(parr => {
+              const option = document.createElement('option');
+              option.value = parr;
+              option.textContent = parr;
+              selectParroquia.appendChild(option);
+            });
+            selectParroquia.disabled = false;
           }
         }
+
+        if (selectParroquia && parroquiaGuardada) {
+          setTimeout(() => {
+            selectParroquia.value = parroquiaGuardada;
+          }, 50);
+        }
+      }
+
+      if (previewFoto && bus.foto) {
+        const rutaLimpia = bus.foto.replace(/\\/g, '/');
+        previewFoto.src = rutaLimpia.startsWith('/') ? rutaLimpia : `/${rutaLimpia}`;
+        previewFoto.style.display = 'block';
       }
 
       const btnSubmit = busForm?.querySelector('button[type="submit"]');
@@ -160,7 +232,7 @@ if (editBusId) {
   })();
 }
 
-// 6. EVENTO SUBMIT ÚNICO Y LIMPIO PARA POST O PUT
+// 6. EVENTO SUBMIT
 busForm?.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -184,7 +256,6 @@ busForm?.addEventListener('submit', async (e) => {
     formData.append('cantidadNinos', Number(inputNinos?.value || 0));
     formData.append('cantidadAdultos', Number(inputAdultos?.value || 0));
 
-    // Adjuntamos la foto de la cámara correctamente
     if (inputFoto?.files[0]) {
       formData.append('foto', inputFoto.files[0]);
     }
@@ -198,7 +269,7 @@ busForm?.addEventListener('submit', async (e) => {
     }
 
     setTimeout(() => {
-      window.location.pathname = '/listBuses/';
+      window.location.href = '/listBuses/';
     }, 1200);
 
   } catch (error) {
@@ -208,7 +279,7 @@ busForm?.addEventListener('submit', async (e) => {
   }
 });
 
-// Botón de regresar
+// Botón regresar
 btnBack?.addEventListener('click', () => {
-  window.location.pathname = '/listBuses/';
+  window.location.href = '/listBuses/';
 });
