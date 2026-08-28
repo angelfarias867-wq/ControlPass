@@ -11,7 +11,7 @@ Con esta página se estaría eliminando la gestión de información por grupos d
 ## Ventajas
 Con este sistema el coordinador tendrá un control de los datos que estarán separados por cada usuario lo que va a minimizar el riesgo de errores, permitiendo tener un reporte en tiempo real, también brinda confidencialidad y discreción de datos ya que al final del dia el historial se borra en el listado de buses, pero se mantiene en la base de datos.
 
-## Tecnologias usadas
+## 💻Tecnologias usadas
 * HTML5: Estructuración
 * CSS: Estilos
 * JavaScript: Lógica
