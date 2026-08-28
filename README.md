@@ -19,4 +19,6 @@ Con este sistema el coordinador tendrá un control de los datos que estarán sep
 * Node.js: Entorno de Ejecución
 * Multer: Manejo de Imágenes 
 
-## Roles del Usuario
+## Descripcion de Roles
+Usuario: Ingreso de Buses
+Administrador: Ingreso de Buses, Verificación de Datos por Usuario, Verificación de Permisos para el ingreso del Usuario al sistema, Reporte Momentáneo y Reporte Final
