@@ -46,6 +46,29 @@ body {
   gap: 1rem;
 }
 
+/* Contenedor que agrupa el badge y el avatar a la derecha */
+.user-container {
+  display: flex;
+  flex-direction: row;     /* Fuerza la alineación horizontal */
+  align-items: center;     /* Centra verticalmente ambos elementos */
+  gap: 10px;               /* Espaciado entre el badge y la inicial */
+}
+
+/* Avatar de Inicial "A" */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
 .back-link {
   color: var(--text-muted);
   text-decoration: none;

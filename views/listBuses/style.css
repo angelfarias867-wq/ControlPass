@@ -42,20 +42,55 @@ body {
   /* Se eliminaron max-width, max-height, border-radius y box-shadow */
 }
 
-/* Header */
 .header {
-  background-color: var(--wa-header-bg);
-  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--wa-card-border);
+  justify-content: space-between; /* <--- Cambia esto para separarlos a los extremos */
+  gap: 1rem;
 }
 
-.header-title {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--wa-text-primary);
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 450px; /* <--- Opcional: limita el ancho máximo para que no ocupe toda la pantalla si no quieres */
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 0.55rem 0.75rem 0.55rem 2.3rem;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-container input:focus {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.2);
+}
+
+.search-container input::placeholder {
+  color: var(--text-muted);
 }
 
 /* Botón Configuración "C" */
@@ -79,20 +114,7 @@ body {
   background-color: var(--wa-card-border);
 }
 
-/* Avatar de Inicial "A" */
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--wa-green-accent);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-}
+
 
 /* Área de contenido con scroll dinámico */
 .main-content {
@@ -112,25 +134,6 @@ body {
   margin: 0 auto;   /* Centra las tarjetas en el medio de la pantalla */
 }
 
-/* Contenedor que agrupa el botón y el avatar a la derecha */
-.user-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Estilo para el botón de cerrar sesión acorde al diseño */
-.logout-btn.btn-primary {
-  padding: 6px 14px;      /* Más compacto que un botón de formulario */
-  font-size: 14px;        /* Letra acorde a la barra superior */
-  font-weight: 500;
-  width: auto;            /* Que no ocupe todo el ancho */
-  border-radius: 8px;     /* Mantiene la misma curvatura */
-}
-
-.logout-btn:hover {
-  background-color: rgba(16, 185, 129, 0.15); /* Efecto hover suave */
-}
 
 /* ESTILOS DE LAS TARJETAS DE BUSES (.bus-card) */
 .bus-card {

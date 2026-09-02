@@ -2,7 +2,7 @@ const busListContainer = document.querySelector('#bus-list');
 const emptyState = document.querySelector('#empty-state');
 const btnConfig = document.querySelector('#btn-config');
 const btnNewBus = document.querySelector('#btn-new-bus');
-const btnLogout = document.getElementById('btn-logout');
+const searchInput = document.getElementById('bus-search-input');
 const userAvatar = document.querySelector('#user-avatar');
 
 
@@ -18,6 +18,28 @@ const canEditOrDelete = (bus) => {
   // Retorna true ÚNICAMENTE si los nombres coinciden
   return activeUserName === busOwner;
 };
+
+// BUSCADOR
+if (searchInput) {
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    
+    // Selecciona todas las tarjetas de los buses en pantalla
+    const busCards = document.querySelectorAll('.bus-card'); // Asegúrate de que tus tarjetas usen la clase .bus-card
+
+    busCards.forEach(card => {
+      // Extrae todo el texto interno de la tarjeta (nombre, placa, colegio, números, etc.)
+      const cardText = card.textContent.toLowerCase();
+
+      // Si el texto de la tarjeta incluye lo que escribió el usuario, se muestra; si no, se oculta
+      if (cardText.includes(query)) {
+        card.style.display = ''; // Muestra la tarjeta por defecto
+      } else {
+        card.style.display = 'none'; // Oculta la tarjeta si no coincide
+      }
+    });
+  });
+}
 
 // LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
 const optionspress = (cardElement, bus) => {
@@ -157,29 +179,7 @@ const createBusCard = (bus) => {
   }
 })();
 
-// EVENTO DE CIERRE DE SESIÓN
-if (btnLogout) {
-  btnLogout.addEventListener('click', async () => {
-    try {
-      // Petición al backend para borrar la cookie de sesión
-      await axios.get('/api/logout', { withCredentials: true });
 
-      // Limpiar datos locales si los hubiera
-      localStorage.removeItem('currentUser');
-
-      // Redirigir al usuario al login
-      window.location.pathname = '/';
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-
-      if (error.response && error.response.status === 401) {
-        window.location.pathname = '/';
-      } else {
-        alert('Hubo un problema al intentar cerrar sesión.');
-      }
-    }
-  });
-}
 
 // EVENTOS DE NAVEGACIÓN
 btnNewBus.addEventListener('click', () => {

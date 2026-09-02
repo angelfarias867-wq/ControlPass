@@ -24,9 +24,9 @@
       <h1 class="header-title">Configuración</h1>
     </div>
 
-    <!-- Badge de rol -->
-    <div id="user-role-badge" class="role-badge">
-      Cargando...
+    <div class="user-container">
+      <div id="user-avatar" class="user-avatar">A</div>
+      <div id="user-role-badge" class="role-badge">Cargando...</div>
     </div>
   </header>
 
@@ -116,12 +116,27 @@
             <span class="slider"></span>
           </label>
         </div>
+
+        <!-- Cerrar Sesión -->
+        <button id="btn-logout" class="settings-item btn-logout-item">
+          <div class="item-content">
+            <!-- Ícono de logout / salir -->
+            <svg class="icon icon-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span class="text-danger">Cerrar sesión</span>
+          </div>
+          <svg class="icon arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
     </section>
 
   </main>
-  
-<script type="module" src="./index.js"></script>
+
+  <script type="module" src="./index.js"></script>
 </body>
 
 </html>
