@@ -52,7 +52,7 @@ body {
   flex-direction: row;     /* Fuerza la alineación horizontal */
   align-items: center;     /* Centra verticalmente ambos elementos */
   gap: 10px;               /* Espaciado entre el badge y la inicial */
-}
+} 
 
 /* Avatar de Inicial "A" */
 .user-avatar {
