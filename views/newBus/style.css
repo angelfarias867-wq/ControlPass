@@ -36,18 +36,14 @@ body {
 }
 
 .header {
-  background-color: var(--wa-header-bg);
+  background-color: transparent; /* Elimina el fondo sólido de la barra */
+  border-bottom: none;          /* Elimina la línea divisoria */
   padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--wa-card-border);
 }
 
-.header-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
 
 .icon-btn {
   width: 40px;
@@ -151,6 +147,177 @@ body {
 .btn-primary {
   width: 100%;
   max-width: 480px; /* Ancho cómodo alineado con la vista del listado */
+  padding: 14px;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--wa-green-hover);
+}
+
+/* --- MODO CLARO (WhatsApp Light Theme) --- */
+body.light-mode, 
+html.light-mode {
+  --wa-bg-app: #f0f2f5;          /* Fondo general claro */
+  --wa-header-bg: #ffffff;      /* Barra superior blanca limpia */
+  --wa-card-bg: #ffffff;        
+  --wa-card-border: #e9edef;    /* Bordes sutiles */
+  --wa-text-primary: #111b21;   /* Texto oscuro principal */
+  --wa-text-secondary: #667781; /* Texto gris secundario */
+  --wa-green-accent: #00a884;   
+  --wa-green-hover: #008f70;    
+  --wa-icon-bg: #e9edef;        /* Fondo de iconos en claro */
+  --wa-input-bg: #ffffff;       /* Inputs blancos limpios */
+}
+
+/* Reset Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--wa-bg-app);
+  color: var(--wa-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--wa-header-bg);
+  border-bottom: 1px solid var(--wa-card-border);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-icon-bg);
+  color: var(--wa-text-primary);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--wa-card-border);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.bus-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 650px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: var(--wa-text-secondary);
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px 14px;
+  background-color: var(--wa-input-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 8px;
+  color: var(--wa-text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--wa-green-accent);
+}
+
+.form-group select option {
+  background-color: var(--wa-header-bg);
+  color: var(--wa-text-primary);
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary {
+  width: 100%;
+  max-width: 480px;
   padding: 14px;
   background-color: var(--wa-green-accent);
   color: #ffffff;

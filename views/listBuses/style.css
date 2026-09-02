@@ -261,6 +261,306 @@ body {
 }
 
 /* ==========================================================================
+   PALETAS DE COLORES (WHATSAPP DARK & LIGHT MODE)
+   ========================================================================== */
+
+/* --- MODO OSCURO (Por defecto) --- */
+:root {
+  --wa-bg-app: #0b141a;          
+  --wa-header-bg: #1f2c34;      
+  --wa-card-bg: #111b21;        
+  --wa-card-border: #222d34;    
+  --wa-text-primary: #e9edef;   
+  --wa-text-secondary: #8696a0; 
+  --wa-green-accent: #00a884;   
+  --wa-green-hover: #008f70;    
+  --wa-icon-bg: #2a3942;        
+  --wa-danger: #ea868f;         
+}
+
+/* --- MODO CLARO (WhatsApp Light Theme) --- */
+body.light-mode, 
+html.light-mode {
+  --wa-bg-app: #f0f2f5;          /* Fondo general claro de WhatsApp */
+  --wa-header-bg: #f0f2f5;      /* Barra superior integrada */
+  --wa-card-bg: #ffffff;        /* Tarjetas blancas limpias */
+  --wa-card-border: #e9edef;    /* Bordes muy sutiles */
+  --wa-text-primary: #111b21;   /* Texto oscuro principal */
+  --wa-text-secondary: #667781; /* Texto gris secundario */
+  --wa-green-accent: #00a884;   
+  --wa-green-hover: #008f70;    
+  --wa-icon-bg: #e9edef;        /* Fondo de botones de iconos en claro */
+  --wa-danger: #df3333;         
+}
+
+/* Reset Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--wa-bg-app);
+  color: var(--wa-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Envoltorio principal de la app */
+.app-container {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--wa-header-bg);
+  border-bottom: 1px solid var(--wa-card-border);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--wa-text-secondary);
+  pointer-events: none;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 0.55rem 0.75rem 0.55rem 2.3rem;
+  background-color: var(--wa-card-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 8px;
+  color: var(--wa-text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-container input:focus {
+  border-color: var(--wa-green-accent);
+  box-shadow: 0 0 0 2px rgba(0, 168, 132, 0.2);
+}
+
+.search-container input::placeholder {
+  color: var(--wa-text-secondary);
+}
+
+/* Botón Configuración "C" */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--wa-icon-bg);
+  color: var(--wa-text-primary);
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--wa-card-border);
+}
+
+/* Área de contenido con scroll dinámico */
+.main-content {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* ESTILOS DE LAS TARJETAS DE BUSES (.bus-card) */
+.bus-card {
+  background-color: var(--wa-card-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bus-card:active {
+  transform: scale(0.99);
+}
+
+.driver-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--wa-text-primary);
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--wa-text-primary);
+}
+
+.institution {
+  font-size: 0.95rem;
+  color: var(--wa-text-secondary);
+  margin: 2px 0;
+}
+
+.metrics {
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   MENÚ FLOTANTE AL DEJAR PULSADO (LONG PRESS)
+   ========================================================================== */
+.bus-options-menu {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: var(--wa-card-bg);
+  border: 1px solid var(--wa-card-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.bus-options-menu button {
+  background: transparent;
+  border: none;
+  color: var(--wa-text-primary);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bus-options-menu button:hover {
+  background-color: var(--wa-bg-app);
+}
+
+.bus-options-menu .btn-delete {
+  color: var(--wa-danger);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Estado Vacío */
+.empty-state {
+  text-align: center;
+  margin: auto;
+  color: var(--wa-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Footer & Botón de Acción */
+.footer {
+  padding: 20px;
+  background-color: var(--wa-bg-app);
+  display: flex;
+  justify-content: center;
+}
+
+.btn-primary {
+  width: 100%;
+  max-width: 480px;
+  padding: 14px 28px;
+  background-color: var(--wa-green-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--wa-green-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
+   ADAPTABILIDAD PANTALLA COMPLETA (DESKTOP)
+   ========================================================================== */
+@media (min-width: 768px) {
+   .header, .main-content, .footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .bus-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .btn-primary {
+    width: auto;
+    padding: 14px 40px;
+  }
+}
+
+
+
+/* ==========================================================================
    ADAPTABILIDAD PANTALLA COMPLETA (DESKTOP)
    ========================================================================== */
 @media (min-width: 768px) {

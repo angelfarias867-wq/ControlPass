@@ -64,81 +64,160 @@ busesRouter.get("/finalReport", async (req, res) => {
   }
 });
 
-// 4. Endpoint para exportar el reporte a Excel
+// 4. Endpoint para exportar el reporte a Excel con la fecha actual del día
 busesRouter.get("/exportExcel", async (req, res) => {
   try {
-    // Traemos todos los buses de la base de datos
     const buses = await Bus.find({});
 
-    // Creamos un nuevo libro de Excel y una hoja de trabajo
     const workbook = new excelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Reporte de Buses');
+    const worksheet = workbook.addWorksheet('Reporte');
 
-    // Definimos las columnas del Excel
-    worksheet.columns = [
-      { header: 'N° Bus', key: 'numeroBus', width: 10 },
-      { header: 'Registrado por', key: 'usuario', width: 20 },
-      { header: 'Tipo', key: 'entidad', width: 15 },
-      { header: 'Nombre', key: 'nombreEntidad', width: 35 },
-      { header: 'Estado', key: 'estado', width: 15 },
-      { header: 'Municipio', key: 'municipio', width: 25 },
-      { header: 'Parroquia', key: 'parroquia', width: 25 },
-      { header: 'Niños', key: 'cantidadNinos', width: 10 },
-      { header: 'Adultos', key: 'cantidadAdultos', width: 10 },
-      { header: 'Total Pasajeros', key: 'totalPasajeros', width: 15 },
+    // Estilos reutilizables
+    const centerAlignment = { horizontal: 'center', vertical: 'middle' };
+    const thinBorder = {
+      top: { style: 'thin', color: 'BFBFBF' },
+      left: { style: 'thin', color: 'BFBFBF' },
+      bottom: { style: 'thin', color: 'BFBFBF' },
+      right: { style: 'thin', color: 'BFBFBF' }
+    };
+    const headerFill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '8EA9DB' } };
+
+    // Obtener la fecha actual formateada (ej. DD-MM-YYYY)
+    const fechaActual = new Date();
+    const dia = String(fechaActual.getDate()).padStart(2, '0');
+    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+    const anio = fechaActual.getFullYear();
+    const fechaStr = `${dia}-${mes}-${anio}`;
+
+    // 1. TÍTULO PRINCIPAL CON LA FECHA DEL DÍA (Fila 2, fusionado de A a D)
+    worksheet.addRow([]); // Fila 1 vacía
+    const titleRow = worksheet.addRow([`EXPO NIÑAS Y NIÑOS PRODUCTORES - REPORTE DEL ${fechaStr}`]);
+    worksheet.mergeCells('A2:D2');
+    
+    titleRow.font = { bold: true, size: 11 };
+    titleRow.alignment = centerAlignment;
+    
+    // Aplicar color y bordes únicamente en el rango A2:D2
+    ['A', 'B', 'C', 'D'].forEach(col => {
+      const cell = worksheet.getCell(`${col}2`);
+      cell.fill = headerFill;
+      cell.border = thinBorder;
+    });
+
+    worksheet.addRow([]); // Fila 3 vacía
+
+    // Definición de bloques
+    const bloques = [
+      { key: 'ministerio', tituloCol2: 'MINISTERIOS', usaParroquia: false, headerNro: 'NRO' },
+      { key: 'institucion', tituloCol2: 'INSTITUCIONES', usaParroquia: true, headerNro: 'ITEMS' },
+      { key: 'colegio', tituloCol2: 'ESCUELAS', usaParroquia: true, headerNro: 'ITEMS' },
+      { key: 'comuna', tituloCol2: 'COMUNA', usaParroquia: true, headerNro: 'NRO' },
+      { key: 'campamento', tituloCol2: 'CAMPAMENTOS', usaParroquia: true, headerNro: 'NRO' }
     ];
 
-    // Variables para calcular los totales finales
-    let sumaNinos = 0;
-    let sumaAdultos = 0;
+    function obtenerClaveCategoria(entidad) {
+      if (!entidad) return 'institucion';
+      const entLower = entidad.toLowerCase().trim();
+      if (entLower.includes('ministerio')) return 'ministerio';
+      if (entLower.includes('colegio') || entLower.includes('escuela') || entLower.includes('liceo') || entLower.includes('cein')) return 'colegio';
+      if (entLower.includes('comun')) return 'comuna';
+      if (entLower.includes('campament') || entLower.includes('refugio')) return 'campamento';
+      return 'institucion';
+    }
 
-    // Llenamos las filas con los datos de cada bus
-    buses.forEach(bus => {
-      const ninos = bus.cantidadNinos || 0;
-      const adultos = bus.cantidadAdultos || 0;
-      sumaNinos += ninos;
-      sumaAdultos += adultos;
+    // 2. RECORRER CADA BLOQUE
+    bloques.forEach((bloque) => {
+      const busesBloque = buses.filter(bus => obtenerClaveCategoria(bus.entidad) === bloque.key);
+      if (busesBloque.length === 0) return;
 
-      worksheet.addRow({
-        numeroBus: bus.numeroBus,
-        usuario: bus.usuario,
-        entidad: bus.entidad,
-        nombreEntidad: bus.nombreEntidad,
-        estado: bus.estado,
-        municipio: bus.municipio,
-        parroquia: bus.parroquia || bus.lugarEntidad,
-        cantidadNinos: ninos,
-        cantidadAdultos: adultos,
-        totalPasajeros: ninos + adultos
+      // Ordenar alfabéticamente
+      busesBloque.sort((a, b) => {
+        const estA = (a.estado || '').trim();
+        const estB = (b.estado || '').trim();
+        if (estA !== estB) return estA.localeCompare(estB, 'es', { sensitivity: 'base' });
+        const parA = (a.parroquia || a.lugarEntidad || '').trim();
+        const parB = (b.parroquia || b.lugarEntidad || '').trim();
+        return parA.localeCompare(parB, 'es', { sensitivity: 'base' });
       });
+
+      // Cabecera de la sección
+      let headerRow;
+      if (!bloque.usaParroquia) {
+        headerRow = worksheet.addRow([bloque.headerNro, bloque.tituloCol2, '', 'ESTADO']);
+        const rIdx = headerRow.number;
+        worksheet.mergeCells(`B${rIdx}:C${rIdx}`);
+        
+        ['A', 'B', 'C', 'D'].forEach(col => {
+          const cell = worksheet.getCell(`${col}${rIdx}`);
+          cell.font = { bold: true };
+          cell.alignment = centerAlignment;
+          cell.fill = headerFill;
+          cell.border = thinBorder;
+        });
+      } else {
+        headerRow = worksheet.addRow([bloque.headerNro, bloque.tituloCol2, 'PARROQUIA', 'ESTADO']);
+        const rIdx = headerRow.number;
+        
+        ['A', 'B', 'C', 'D'].forEach(col => {
+          const cell = worksheet.getCell(`${col}${rIdx}`);
+          cell.font = { bold: true };
+          cell.alignment = centerAlignment;
+          cell.fill = headerFill;
+          cell.border = thinBorder;
+        });
+      }
+
+      // Filas de datos
+      busesBloque.forEach((bus, index) => {
+        const nombreVal = (bus.nombreEntidad || 'SIN NOMBRE').trim().toUpperCase();
+        const estadoVal = (bus.estado || '').trim().toUpperCase();
+
+        if (!bloque.usaParroquia) {
+          const dataRow = worksheet.addRow([index + 1, nombreVal, '', estadoVal]);
+          const rIdxData = dataRow.number;
+          worksheet.mergeCells(`B${rIdxData}:C${rIdxData}`);
+
+          ['A', 'B', 'C', 'D'].forEach(col => {
+            const cell = worksheet.getCell(`${col}${rIdxData}`);
+            cell.alignment = centerAlignment;
+            cell.border = thinBorder;
+          });
+        } else {
+          const parroquiaVal = (bus.parroquia || bus.lugarEntidad || '').trim().toUpperCase();
+          const dataRow = worksheet.addRow([index + 1, nombreVal, parroquiaVal, estadoVal]);
+          const rIdxData = dataRow.number;
+
+          ['A', 'B', 'C', 'D'].forEach(col => {
+            const cell = worksheet.getCell(`${col}${rIdxData}`);
+            cell.alignment = centerAlignment;
+            cell.border = thinBorder;
+          });
+        }
+      });
+
+      // Filas vacías de separación entre bloques
+      worksheet.addRow([]);
+      worksheet.addRow([]);
     });
 
-    // Le damos estilo negrita a la primera fila (los encabezados)
-    worksheet.getRow(1).font = { bold: true };
+    // Anchos de columnas ajustados
+    worksheet.columns = [
+      { width: 12 },  // NRO / ITEMS
+      { width: 50 },  // ENTIDAD
+      { width: 25 },  // PARROQUIA
+      { width: 20 }   // ESTADO
+    ];
 
-    // Agregamos una fila vacía para separar
-    worksheet.addRow({});
-
-    // Agregamos la fila de TOTALES al final del documento
-    const filaTotales = worksheet.addRow({
-      nombreEntidad: 'TOTAL FINALES',
-      cantidadNinos: sumaNinos,
-      cantidadAdultos: sumaAdultos,
-      totalPasajeros: sumaNinos + sumaAdultos
-    });
-    filaTotales.font = { bold: true };
-
-    // Configuramos las cabeceras de la respuesta para que el navegador sepa que es un Excel
+    // Configurar cabeceras HTTP con la fecha incorporada en el nombre del archivo descargado
     res.setHeader(
       'Content-Type',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     );
     res.setHeader(
       'Content-Disposition',
-      'attachment; filename="Reporte_Final_ControlPass.xlsx"'
+      `attachment; filename="Reporte_ControlPass_${fechaStr}.xlsx"`
     );
 
-    // Escribimos el archivo y lo enviamos
     await workbook.xlsx.write(res);
     res.status(200).end();
 
@@ -182,7 +261,7 @@ busesRouter.post("/", upload.single('foto'), async (req, res) => {
     } = req.body;
 
     const newBus = new Bus({
-      usuario: user.name || user.username || "Usuario",
+      usuario: user.name || user.username,
       numeroBus: Number(numeroBus) || 0,
       foto: req.file ? req.file.path : undefined,
       entidad: entidad || "Entidad no especificada",
@@ -217,12 +296,7 @@ busesRouter.delete("/:id", async (req, res) => {
       return res.status(404).json({ error: "Bus no encontrado" });
     }
 
-    const currentUserName = user.name || user.username;
-
-    if (bus.usuario !== currentUserName) {
-      return res.status(403).json({ error: "No tienes permiso para eliminar este bus porque no lo creaste tú" });
-    }
-
+    // --- QUITAMOS EL BLOQUEO DE COMPARACIÓN IGUAL QUE EN EL PUT ---
     await Bus.findByIdAndDelete(req.params.id);
     return res.sendStatus(204);
   } catch (error) {

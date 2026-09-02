@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="style.css">
   <!-- CDN de Axios -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  (function() {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light-mode');
+    }
+  })();
+</script>
 </head>
 
 <body>
@@ -109,7 +116,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
-            <span>Modo Claro/Oscuro</span>
+            <span>Modo Oscuro</span>
           </div>
           <label class="switch">
             <input type="checkbox" id="theme-toggle" checked>

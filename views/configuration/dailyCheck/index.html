@@ -7,6 +7,13 @@
   <title>ControlPass - Chequeo del Día</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  (function() {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light-mode');
+    }
+  })();
+</script>
 </head>
 
 <body>
@@ -19,17 +26,15 @@
         </svg>
         <span>Volver</span>
       </a>
-      <h1 class="header-title">Chequeo del Día</h1>
     </div>
     <div id="today-date" class="role-badge">--/--/----</div>
   </header>
 
   <main class="main-container">
-    <!-- Total acumulado general -->
-    <div class="settings-card" style="padding: 1.25rem; text-align: center;">
-      <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">TOTAL DÍA</span>
-      <h2 id="total-buses-today"
-        style="color: var(--accent-green); font-size: 2.25rem; font-weight: 800; margin-top: 0.25rem;">0</h2>
+    <!-- Total acumulado general corregido con la clase summary-card -->
+    <div class="summary-card">
+      <span class="summary-label">TOTAL DÍA</span>
+      <h2 id="total-buses-today" class="summary-value">0</h2>
     </div>
 
     <!-- Lista por usuarios -->

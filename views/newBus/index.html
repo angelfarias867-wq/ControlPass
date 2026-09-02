@@ -7,6 +7,13 @@
   <title>Nuevo Bus - ControlPass</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+  (function() {
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light-mode');
+    }
+  })();
+</script>
 </head>
 
 <body>
@@ -14,8 +21,6 @@
   <div class="app-container">
     <header class="header">
       <button id="btn-back" class="icon-btn" type="button" aria-label="Volver">&larr;</button>
-      <h1 class="header-title" id="form-title">Nuevo Bus</h1>
-      <div id="user-avatar" class="user-avatar">A</div>
     </header>
 
     <main class="main-content">
@@ -41,7 +46,10 @@
           <select id="clasificacionEntidad" required>
             <option value="" disabled selected>Clasifica la entidad</option>
             <option value="colegio">Colegio</option>
+            <option value="universidad">Universidad</option>
             <option value="comuna">Comuna</option>
+            <option value="campamento">Campamento</option>
+            <option value="plan-vacacional">Plan Vacacional</option>
             <option value="institucion">Institución</option>
             <option value="ministerio">Ministerio</option>
           </select>
@@ -62,8 +70,13 @@
             <option value="C.E.I.N.">C.E.I.N. (Centro de Educación Inicial Nacional)</option>
             <option value="U.E.A.">U.E.A. (Unidad Educativa Agrícola)</option>
             <option value="U.E.P.A.">U.E.P.A. (Unidad Educativa Privada)</option>
-            <option value="E.T.N. / E.T.C.R.">E.T.N. / E.T.C.R. (Escuela Técnica Nacional / Escuela Técnica de
-              Capacitación Rural)</option>
+            <option value="E.T.N. / E.T.C.R.">E.T.N. / E.T.C.R. (Escuela Técnica Nacional / Escuela Técnica de Capacitación Rural)</option>
+            <option value="E.M.">Escuela Militar</option>
+            <option value="E.F.">Escuela de Futbol</option>
+            <option value="E.V.">Escuela de Voleibol</option>
+            <option value="E.B.">Escuela de Baloncesto</option>
+            <option value="E.A.">Escuela de Atletismo</option>
+            <option value="E.N.">Escuela de Natación</option>
           </select>
         </div>
 

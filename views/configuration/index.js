@@ -29,10 +29,19 @@ import { createConfirmation } from '../components/alerts.js';
   }
 
   // Lógica para el Modo Oscuro (Persistencia en LocalStorage)
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.querySelector('#theme-toggle');
+  if (!themeToggle) return;
+
   const savedTheme = localStorage.getItem('theme');
+
   if (savedTheme === 'light') {
     themeToggle.checked = false;
     document.body.classList.add('light-mode');
+  } else {
+    themeToggle.checked = true;
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('theme', 'dark');
   }
 
   themeToggle.addEventListener('change', (e) => {
@@ -44,6 +53,7 @@ import { createConfirmation } from '../components/alerts.js';
       localStorage.setItem('theme', 'light');
     }
   });
+});
 
   // CARGA INICIAL DE DATA Y USUARIO
 (async () => {

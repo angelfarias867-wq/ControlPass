@@ -2,45 +2,25 @@ const usersRouter = require('express').Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
-const nodemailer = require('nodemailer');
-const axios = require('axios');
 
 // --- 1. RUTA DE REGISTRO (SIGNUP) ---
 usersRouter.post('/', async (request, response) => {
-  const { name, email, password } = request.body;
+  const { name, password } = request.body;
 
-  if (!name || !email || !password) {
+  if (!name || !password) {
     return response
       .status(400)
-      .json({ error: 'Todos los espacios son requeridos' });
+      .json({ error: 'El nombre y la contraseña son requeridos' });
   }
 
-  // Se verifica si el email ya existe
-  const userExists = await User.findOne({ email });
+  // Se verifica si el nombre de usuario ya existe
+  const userExists = await User.findOne({ name });
 
   if (userExists) {
     return response
       .status(400)
-      .json({ error: 'El email ya se encuentra en uso' });
+      .json({ error: 'Este nombre ya se encuentra en uso. Por favor elige otro.' });
   }
-
-  // --- LA API (Abstract API) ---
-  try {
-    const apiKey = process.env.API_KEY;
-    const url = `https://emailreputation.abstractapi.com/v1/?api_key=${apiKey}&email=${email}`;
-    
-    const abstractResponse = await axios.get(url);
-    const status = abstractResponse.data?.email_deliverability?.status;
-
-    if (status === 'undeliverable') {
-      return response
-        .status(400)
-        .json({ error: 'El correo electrónico proporcionado no existe o no es válido.' });
-    }
-  } catch (apiError) {
-    console.error('Error al conectar con Abstract API:', apiError.message);
-  }
-  // ------------------------------
   
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -48,7 +28,6 @@ usersRouter.post('/', async (request, response) => {
   // Se crea el usuario con verified: false para que aparezca en la lista de espera
   const newUser = new User({
     name,
-    email,
     passwordHash,
     verified: false, 
   });
@@ -57,16 +36,17 @@ usersRouter.post('/', async (request, response) => {
   
   return response
     .status(201)
-    .json('Usuario creado exitosamente');
+    .json('Usuario creado exitosamente. Espera la aprobación del administrador.');
 });
+
 
 // --- 2. RUTA DE INICIO DE SESIÓN (LOGIN) ---
 usersRouter.post('/login', async (request, response) => {
   try {
-    const { email, password } = request.body;
+    const { name, password } = request.body;
 
-    // Buscamos al usuario por su email
-    const user = await User.findOne({ email });
+    // Buscamos al usuario por su nombre en lugar del email
+    const user = await User.findOne({ name });
 
     // Verificamos si existe y si la contraseña es correcta
     const passwordCorrect = user === null 
@@ -74,7 +54,7 @@ usersRouter.post('/login', async (request, response) => {
       : await bcrypt.compare(password, user.passwordHash);
 
     if (!(user && passwordCorrect)) {
-      return response.status(401).json({ error: 'Email o contraseña inválidos' });
+      return response.status(401).json({ error: 'Nombre o contraseña inválidos' });
     }
 
     // Verificamos si ya fue aprobado por el administrador
@@ -82,10 +62,10 @@ usersRouter.post('/login', async (request, response) => {
       return response.status(401).json({ error: 'Tu cuenta está en lista de espera. Un administrador debe aprobarla primero.' });
     }
 
-    // Creamos el token
+    // Creamos el token (ahora incluye el nombre en vez del email)
     const userForToken = {
       id: user._id,
-      email: user.email,
+      name: user.name,
       role: user.role
     };
 
@@ -103,9 +83,9 @@ usersRouter.post('/login', async (request, response) => {
       maxAge: 1000 * 60 * 60 * 24 // 1 día
     });
 
-    // RESPONDEMOS CON EL NOMBRE BLINDADO (Evita el "Usuario Desconocido")
+    // Respondemos con los datos para el frontend
     return response.status(200).json({
-      name: user.name || user.nombre || "Ángel Farías",
+      name: user.name,
       role: user.role || 'user',
       redirectUrl: '/listBuses/'
     });
@@ -115,6 +95,7 @@ usersRouter.post('/login', async (request, response) => {
     response.status(500).json({ error: "Error interno del servidor" });
   }
 });
+
 
 // --- 3. RUTAS DE ADMINISTRACIÓN ---
 

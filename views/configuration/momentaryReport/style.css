@@ -1,3 +1,24 @@
+/* --- Variables globales basadas en el tema --- */
+:root {
+  --bg-body: #0b141a;
+  --bg-card: #111b21;
+  --text-main: #e9edef;
+  --border-color: #3b4a54;
+  --btn-hover-bg: #202c33;
+  --accent-color: #00a884;
+}
+
+/* --- Modo Claro --- */
+body.light-mode, 
+html.light-mode {
+  --bg-body: #f0f2f5;
+  --bg-card: #ffffff;
+  --text-main: #111b21;
+  --border-color: #d1d7db;
+  --btn-hover-bg: #f5f6f6;
+  --accent-color: #00a884;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,14 +26,15 @@
 }
 
 body {
-  background-color: #0b141a;
-  color: #e9edef;
+  background-color: var(--bg-body);
+  color: var(--text-main);
   font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', cursive, sans-serif;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .page-container {
@@ -24,14 +46,15 @@ body {
 
 .report-card {
   width: 100%;
-  background-color: #111b21;
-  border: 2px solid #3b4a54;
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
   border-radius: 2rem;
   padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .report-title {
@@ -40,6 +63,7 @@ body {
   margin-bottom: 2rem;
   text-align: center;
   letter-spacing: 0.5px;
+  color: var(--text-main);
 }
 
 .report-list {
@@ -58,11 +82,13 @@ body {
 
 .report-label {
   font-size: 1.3rem;
+  color: var(--text-main);
 }
 
 .report-val {
   font-size: 1.3rem;
   font-weight: bold;
+  color: var(--text-main);
 }
 
 /* Botón Volver */
@@ -72,18 +98,19 @@ body {
   text-align: center;
   padding: 0.75rem 1rem;
   background-color: transparent;
-  color: #e9edef;
-  border: 2px solid #3b4a54;
+  color: var(--text-main);
+  border: 2px solid var(--border-color);
   border-radius: 1.2rem;
   text-decoration: none;
   font-size: 1.2rem;
   font-family: inherit;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-volver:hover {
-  background-color: #202c33;
-  border-color: #00a884;
+  background-color: var(--btn-hover-bg);
+  border-color: var(--accent-color);
 }
 
 .btn-volver:active {

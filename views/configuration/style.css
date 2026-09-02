@@ -319,3 +319,42 @@ input:checked + .slider:before {
   background-color: #00a884;
   color: #111b21;
 }
+
+/* ==========================================
+   FORZAR MODO CLARO EN TODAS LAS VISTAS
+   ========================================== */
+body.light-mode {
+  background-color: #f0f2f5 !important;
+  color: #111b21 !important;
+}
+
+body.light-mode .header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+body.light-mode .settings-card,
+body.light-mode .bus-form,
+body.light-mode .app-container {
+  background-color: #f0f2f5 !important;
+  color: #111b21 !important;
+}
+
+body.light-mode input,
+body.light-mode select,
+body.light-mode textarea {
+  background-color: #ffffff !important;
+  color: #111b21 !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-mode .settings-item {
+  color: #111b21 !important;
+}
+
+body.light-mode .icon-btn,
+body.light-mode .user-avatar {
+  /* Mantiene o ajusta el fondo de los botones secundarios en modo claro */
+  background-color: #e2e8f0 !important;
+  color: #111b21 !important;
+}

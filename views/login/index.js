@@ -1,4 +1,4 @@
-const emailImput = document.getElementById("email-input");
+const nameInput = document.getElementById("name-input");
 const passwordInput = document.getElementById("password-input");
 const form = document.getElementById("form");
 const errorText = document.getElementById("error-text");
@@ -9,7 +9,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   try {
     const user = {
-      email: emailImput.value,
+      name: nameInput.value,
       password: passwordInput.value
     };
 
@@ -28,7 +28,7 @@ form.addEventListener("submit", async (e) => {
     window.location.pathname = data.redirectUrl || '/listBuses/';
 
   } catch (error) {
-    createNotification("Usuario/contraseña incorrectos o permiso no autorizado", "error");
+    createNotification(error.response?.data?.error || "Usuario/contraseña incorrectos o permiso no autorizado", "error");
     console.log(error);
   }
 });

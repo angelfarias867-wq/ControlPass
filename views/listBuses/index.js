@@ -12,10 +12,16 @@ let currentUser = null;
 const canEditOrDelete = (bus) => {
   if (!currentUser) return false;
 
+  // Si el usuario activo es administrador, tiene permisos totales
+  const userRole = (currentUser.role || currentUser.tipo || '').toLowerCase();
+  if (userRole === 'admin' || userRole === 'administrador') {
+    return true;
+  }
+
   const activeUserName = (currentUser.name || currentUser.username || '').trim();
   const busOwner = (bus.usuario || '').trim();
 
-  // Retorna true ÚNICAMENTE si los nombres coinciden
+  // Retorna true si los nombres coinciden
   return activeUserName === busOwner;
 };
 
@@ -23,19 +29,14 @@ const canEditOrDelete = (bus) => {
 if (searchInput) {
   searchInput.addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase().trim();
-    
-    // Selecciona todas las tarjetas de los buses en pantalla
-    const busCards = document.querySelectorAll('.bus-card'); // Asegúrate de que tus tarjetas usen la clase .bus-card
+    const busCards = document.querySelectorAll('.bus-card');
 
     busCards.forEach(card => {
-      // Extrae todo el texto interno de la tarjeta (nombre, placa, colegio, números, etc.)
       const cardText = card.textContent.toLowerCase();
-
-      // Si el texto de la tarjeta incluye lo que escribió el usuario, se muestra; si no, se oculta
       if (cardText.includes(query)) {
-        card.style.display = ''; // Muestra la tarjeta por defecto
+        card.style.display = ''; 
       } else {
-        card.style.display = 'none'; // Oculta la tarjeta si no coincide
+        card.style.display = 'none'; 
       }
     });
   });
@@ -46,7 +47,6 @@ const optionspress = (cardElement, bus) => {
   let timer;
 
   const startPress = (e) => {
-    // Depuración: abre tu consola (F12) para ver si pasa esta validación
     console.log("Usuario actual:", currentUser?.name, "Propietario del bus:", bus.usuario);
 
     if (!canEditOrDelete(bus)) {
@@ -65,7 +65,6 @@ const optionspress = (cardElement, bus) => {
 
   cardElement.addEventListener('touchstart', startPress);
   cardElement.addEventListener('touchend', cancelPress);
-  // Eliminamos 'touchmove' o lo hacemos más flexible para evitar que se cancele al temblor del dedo
 
   cardElement.addEventListener('mousedown', startPress);
   cardElement.addEventListener('mouseup', cancelPress);
@@ -125,16 +124,18 @@ const createBusCard = (bus) => {
   article.id = bus._id || bus.id;
   article.classList.add('bus-card');
 
+  // Muestra el nombre de la persona que lo guardó (bus.usuario o el campo que almacene el nombre)
+  const nombreCreador = bus.usuario || 'Desconocido';
+
   article.innerHTML = `
-    <!-- FOTO DEL BUS (Se muestra solo si existe la ruta) -->
     ${bus.foto ? `<div class="bus-photo-container" style="margin: 8px 0;"><img src="/${bus.foto}" alt="Foto del bus" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;"></div>` : ''}
 
-    <h2 class="driver-name">${bus.usuario}</h2>
+    <h2 class="driver-name">${nombreCreador}</h2>
 
     <div class="card-row">
-  <span>N: ${bus.numeroBus}</span>
-  <span>${bus.entidad ? bus.entidad.toUpperCase() : ''}</span>
-</div>
+      <span>N: ${bus.numeroBus}</span>
+      <span>${bus.entidad ? bus.entidad.toUpperCase() : ''}</span>
+    </div>
     <p class="institution">${bus.nombreEntidad} (${bus.lugarEntidad})</p>
     <div class="card-row metrics">
       <span>Niños: ${bus.cantidadNinos}</span>
@@ -156,8 +157,8 @@ const createBusCard = (bus) => {
     currentUser = storedUser ? JSON.parse(storedUser) : null;
     console.log("Usuario parseado:", currentUser);
 
-    if (userAvatar && currentUser && (currentUser.name || currentUser.username)) {
-      const name = currentUser.name || currentUser.username;
+    if (userAvatar && currentUser && (currentUser.name || currentUser.username || currentUser.nombre || currentUser.nombreCompleto || currentUser.email)) {
+      const name = currentUser.name || currentUser.username || currentUser.nombre || currentUser.nombreCompleto || currentUser.email;
       userAvatar.textContent = name.charAt(0).toUpperCase();
     }
 
@@ -165,6 +166,10 @@ const createBusCard = (bus) => {
 
     if (buses.length > 0) {
       if (emptyState) emptyState.style.display = 'none';
+
+      // --- ORDENAMIENTO NUMÉRICO DE MENOR A MAYOR ---
+      buses.sort((a, b) => Number(a.numeroBus) - Number(b.numeroBus));
+      // ---------------------------------------------
 
       buses.forEach(bus => {
         const busCard = createBusCard(bus);
@@ -178,8 +183,6 @@ const createBusCard = (bus) => {
     console.log("Error al cargar los buses:", error);
   }
 })();
-
-
 
 // EVENTOS DE NAVEGACIÓN
 btnNewBus.addEventListener('click', () => {

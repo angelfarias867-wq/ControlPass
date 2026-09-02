@@ -85,15 +85,22 @@ selectClasificacion?.addEventListener('change', () => {
   }
 });
 
-// 3. CAMBIO DE ESTADO -> LLENAR MUNICIPIOS
+// 3. CAMBIO DE ESTADO -> LLENAR MUNICIPIOS (Versión robusta)
 selectEstado?.addEventListener('change', () => {
   const estadoSeleccionado = selectEstado.value;
   selectMunicipio.innerHTML = '<option value="" disabled selected>Elige el municipio</option>';
   selectParroquia.innerHTML = '<option value="" disabled selected>Elige la parroquia</option>';
   selectParroquia.disabled = true;
 
-  if (estadoSeleccionado && ubicacionesVenezuela[estadoSeleccionado]) {
-    const municipios = Object.keys(ubicacionesVenezuela[estadoSeleccionado]);
+  // Buscar la clave exacta o coincidente ignorando acentos y mayúsculas
+  const estadosKeys = Object.keys(ubicacionesVenezuela);
+  const estadoEncontrado = estadosKeys.find(est => 
+    est.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === 
+    estadoSeleccionado.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  );
+
+  if (estadoEncontrado && ubicacionesVenezuela[estadoEncontrado]) {
+    const municipios = Object.keys(ubicacionesVenezuela[estadoEncontrado]);
     municipios.forEach(mun => {
       const option = document.createElement('option');
       option.value = mun;
