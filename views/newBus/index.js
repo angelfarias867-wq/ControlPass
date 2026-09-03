@@ -85,22 +85,25 @@ selectClasificacion?.addEventListener('change', () => {
   }
 });
 
-// 3. CAMBIO DE ESTADO -> LLENAR MUNICIPIOS (Versión robusta)
+// Variable global para rastrear siempre la clave limpia del estado
+let estadoActualKey = '';
+
+// 3. CAMBIO DE ESTADO -> LLENAR MUNICIPIOS
 selectEstado?.addEventListener('change', () => {
   const estadoSeleccionado = selectEstado.value;
   selectMunicipio.innerHTML = '<option value="" disabled selected>Elige el municipio</option>';
   selectParroquia.innerHTML = '<option value="" disabled selected>Elige la parroquia</option>';
   selectParroquia.disabled = true;
 
-  // Buscar la clave exacta o coincidente ignorando acentos y mayúsculas
-  const estadosKeys = Object.keys(ubicacionesVenezuela);
-  const estadoEncontrado = estadosKeys.find(est => 
-    est.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === 
-    estadoSeleccionado.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-  );
+  // Normalizar para encontrar la llave exacta sin importar acentos o mayúsculas
+  const normalizarTexto = (texto) => texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
-  if (estadoEncontrado && ubicacionesVenezuela[estadoEncontrado]) {
-    const municipios = Object.keys(ubicacionesVenezuela[estadoEncontrado]);
+  estadoActualKey = Object.keys(ubicacionesVenezuela).find(est => 
+    normalizarTexto(est) === normalizarTexto(estadoSeleccionado)
+  ) || estadoSeleccionado;
+
+  if (ubicacionesVenezuela[estadoActualKey]) {
+    const municipios = Object.keys(ubicacionesVenezuela[estadoActualKey]);
     municipios.forEach(mun => {
       const option = document.createElement('option');
       option.value = mun;
@@ -113,14 +116,28 @@ selectEstado?.addEventListener('change', () => {
   }
 });
 
-// 4. CAMBIO DE MUNICIPIO -> LLENAR PARROQUIAS
+// 4. CAMBIO DE MUNICIPIO -> LLENAR PARROQUIAS (Con normalización robusta)
 selectMunicipio?.addEventListener('change', () => {
-  const estadoSeleccionado = selectEstado.value;
   const municipioSeleccionado = selectMunicipio.value;
   selectParroquia.innerHTML = '<option value="" disabled selected>Elige la parroquia</option>';
 
-  if (ubicacionesVenezuela[estadoSeleccionado]?.[municipioSeleccionado]) {
-    const parroquias = ubicacionesVenezuela[estadoSeleccionado][municipioSeleccionado];
+  const normalizarTexto = (texto) => texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+  // Asegurar que encontramos la clave del estado actual
+  if (!ubicacionesVenezuela[estadoActualKey]) {
+    estadoActualKey = Object.keys(ubicacionesVenezuela).find(est => 
+      normalizarTexto(est) === normalizarTexto(selectEstado.value)
+    );
+  }
+
+  // Buscar el municipio ignorando diferencias de acentos
+  const municipiosDelEstado = ubicacionesVenezuela[estadoActualKey] || {};
+  const municipioKey = Object.keys(municipiosDelEstado).find(mun => 
+    normalizarTexto(mun) === normalizarTexto(municipioSeleccionado)
+  );
+
+  if (municipioKey && municipiosDelEstado[municipioKey]) {
+    const parroquias = municipiosDelEstado[municipioKey];
     parroquias.forEach(parr => {
       const option = document.createElement('option');
       option.value = parr;

@@ -10,19 +10,18 @@ import { createConfirmation } from '../components/alerts.js';
 // Variable global para almacenar el usuario activo
 let currentUser = null;
 
+// VALIDACIÓN ESTRICTA DE PERMISOS
 const canEditOrDelete = (bus) => {
   if (!currentUser) return false;
 
-  // Si el usuario activo es administrador, tiene permisos totales
   const userRole = (currentUser.role || currentUser.tipo || '').toLowerCase();
   if (userRole === 'admin' || userRole === 'administrador') {
     return true;
   }
 
-  const activeUserName = (currentUser.name || currentUser.username || '').trim();
-  const busOwner = (bus.usuario || '').trim();
+  const activeUserName = (currentUser.name || currentUser.username || currentUser.nombre || '').trim().toLowerCase();
+  const busOwner = (bus.usuario || '').trim().toLowerCase();
 
-  // Retorna true si los nombres coinciden
   return activeUserName === busOwner;
 };
 
@@ -43,15 +42,14 @@ if (searchInput) {
   });
 }
 
-// LÓGICA DE PULSACIÓN LARGA (LONG PRESS) PARA EDITAR Y ELIMINAR
+// LÓGICA DE PULSACIÓN LARGA (LONG PRESS) CON VERIFICACIÓN DE SEGURIDAD
 const optionspress = (cardElement, bus) => {
   let timer;
 
   const startPress = (e) => {
-    console.log("Usuario actual:", currentUser?.name, "Propietario del bus:", bus.usuario);
-
+    // Si no tiene permisos, se detiene inmediatamente y no muestra nada
     if (!canEditOrDelete(bus)) {
-      console.log("No tienes permisos para editar este bus.");
+      console.log("Acción denegada: No eres el propietario de este bus.");
       return;
     }
 
@@ -74,6 +72,9 @@ const optionspress = (cardElement, bus) => {
 
 // MOSTRAR MENÚ FLOTANTE DE OPCIONES (EDITAR / ELIMINAR)
 const mostrarOpcionesBus = (bus, cardElement) => {
+  // Doble seguridad por si acaso
+  if (!canEditOrDelete(bus)) return;
+
   const existingMenu = document.querySelector('.bus-options-menu');
   if (existingMenu) existingMenu.remove();
 
@@ -89,7 +90,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
   // ACCIÓN ELIMINAR (DELETE) CON ALERTA PERSONALIZADA
   menu.querySelector('.btn-delete').addEventListener('click', (e) => {
     e.stopPropagation();
-    menu.remove(); // Cerramos el menú flotante antes de abrir la alerta
+    menu.remove();
 
     createConfirmation('¿Estás seguro de que deseas eliminar este bus?', async () => {
       try {
@@ -121,7 +122,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
   });
 };
 
-// MODAL PARA AMPLIAR LA FOTO DEL BUS
+// MODAL PARA AMPLIAR LA FOTO DEL BUS CON INFORMACIÓN COMPLETA
 const abrirModalFoto = (bus) => {
   const modal = document.createElement('div');
   modal.classList.add('photo-modal');
@@ -164,7 +165,7 @@ const abrirModalFoto = (bus) => {
   });
 };
 
-// 3. FUNCIÓN PARA CREAR EL ELEMENTO HTML DE LA TARJETA
+// FUNCIÓN PARA CREAR EL ELEMENTO HTML DE LA TARJETA
 const createBusCard = (bus) => {
   const article = document.createElement('article');
   article.id = bus._id || bus.id;
@@ -206,10 +207,7 @@ const createBusCard = (bus) => {
 (async () => {
   try {
     const storedUser = localStorage.getItem('currentUser');
-    console.log("Objeto crudo en localStorage:", storedUser);
-
     currentUser = storedUser ? JSON.parse(storedUser) : null;
-    console.log("Usuario parseado:", currentUser);
 
     if (userAvatar && currentUser && (currentUser.name || currentUser.username || currentUser.nombre || currentUser.nombreCompleto || currentUser.email)) {
       const name = currentUser.name || currentUser.username || currentUser.nombre || currentUser.nombreCompleto || currentUser.email;
@@ -221,9 +219,8 @@ const createBusCard = (bus) => {
     if (buses.length > 0) {
       if (emptyState) emptyState.style.display = 'none';
 
-      // --- ORDENAMIENTO NUMÉRICO DE MENOR A MAYOR ---
+      // ORDENAMIENTO NUMÉRICO DE MENOR A MAYOR
       buses.sort((a, b) => Number(a.numeroBus) - Number(b.numeroBus));
-      // ---------------------------------------------
 
       buses.forEach(bus => {
         const busCard = createBusCard(bus);
