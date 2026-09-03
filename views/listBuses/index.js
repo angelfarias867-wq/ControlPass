@@ -5,6 +5,7 @@ const btnNewBus = document.querySelector('#btn-new-bus');
 const searchInput = document.getElementById('bus-search-input');
 const userAvatar = document.querySelector('#user-avatar');
 
+import { createConfirmation } from '../components/alerts.js';
 
 // Variable global para almacenar el usuario activo
 let currentUser = null;
@@ -85,10 +86,12 @@ const mostrarOpcionesBus = (bus, cardElement) => {
 
   cardElement.append(menu);
 
-  // ACCIÓN ELIMINAR (DELETE)
-  menu.querySelector('.btn-delete').addEventListener('click', async (e) => {
+  // ACCIÓN ELIMINAR (DELETE) CON ALERTA PERSONALIZADA
+  menu.querySelector('.btn-delete').addEventListener('click', (e) => {
     e.stopPropagation();
-    if (confirm('¿Estás seguro de que deseas eliminar este bus?')) {
+    menu.remove(); // Cerramos el menú flotante antes de abrir la alerta
+
+    createConfirmation('¿Estás seguro de que deseas eliminar este bus?', async () => {
       try {
         await axios.delete(`/api/buses/${bus._id || bus.id}`, { withCredentials: true });
         cardElement.remove();
@@ -100,7 +103,7 @@ const mostrarOpcionesBus = (bus, cardElement) => {
         console.error('Error al eliminar el bus:', error);
         alert(error.response?.data?.error || 'No tienes permisos para realizar esta acción');
       }
-    }
+    });
   });
 
   // ACCIÓN EDITAR
@@ -118,17 +121,59 @@ const mostrarOpcionesBus = (bus, cardElement) => {
   });
 };
 
+// MODAL PARA AMPLIAR LA FOTO DEL BUS
+const abrirModalFoto = (bus) => {
+  const modal = document.createElement('div');
+  modal.classList.add('photo-modal');
+
+  const nombreCreador = bus.usuario || 'Desconocido';
+
+  modal.innerHTML = `
+    <div class="photo-modal-content">
+      <button class="photo-close-btn">&times;</button>
+      <img src="/${bus.foto}" alt="Bus ampliado" class="modal-big-image">
+      
+      <div class="modal-photo-info">
+        <h2 class="driver-name">${nombreCreador}</h2>
+        
+        <div class="card-row">
+          <span>N: ${bus.numeroBus}</span>
+          <span>${bus.entidad ? bus.entidad.toUpperCase() : ''}</span>
+        </div>
+        
+        <p class="institution">${bus.nombreEntidad || ''} (${bus.lugarEntidad || ''})</p>
+        
+        <div class="card-row metrics">
+          <span>Niños: ${bus.cantidadNinos}</span>
+          <span>Adultos: ${bus.cantidadAdultos}</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.append(modal);
+
+  modal.querySelector('.photo-close-btn').addEventListener('click', () => {
+    modal.remove();
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+};
+
 // 3. FUNCIÓN PARA CREAR EL ELEMENTO HTML DE LA TARJETA
 const createBusCard = (bus) => {
   const article = document.createElement('article');
   article.id = bus._id || bus.id;
   article.classList.add('bus-card');
 
-  // Muestra el nombre de la persona que lo guardó (bus.usuario o el campo que almacene el nombre)
   const nombreCreador = bus.usuario || 'Desconocido';
 
   article.innerHTML = `
-    ${bus.foto ? `<div class="bus-photo-container" style="margin: 8px 0;"><img src="/${bus.foto}" alt="Foto del bus" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;"></div>` : ''}
+    ${bus.foto ? `<div class="bus-photo-container" style="margin: 8px 0; cursor: pointer;"><img src="/${bus.foto}" alt="Foto del bus" class="bus-thumbnail" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px;"></div>` : ''}
 
     <h2 class="driver-name">${nombreCreador}</h2>
 
@@ -142,6 +187,15 @@ const createBusCard = (bus) => {
       <span>Adultos: ${bus.cantidadAdultos}</span>
     </div>
   `;
+
+  // Evento para abrir la foto en grande al hacer clic
+  if (bus.foto) {
+    const imgThumbnail = article.querySelector('.bus-thumbnail');
+    imgThumbnail.addEventListener('click', (e) => {
+      e.stopPropagation();
+      abrirModalFoto(bus);
+    });
+  }
 
   optionspress(article, bus);
 

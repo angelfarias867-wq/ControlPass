@@ -32,16 +32,17 @@ loginRouter.post('/', async (request, response) => {
     name: userExists.name
   };
 
-  // 5. Firmar el token de acceso
+  // 5. Firmar el token de acceso con una duración larga (ej. 30 días)
   const accessToken = jwt.sign(userForToken, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "30d",
   });
 
-  // 6. Guardar el token en la cookie de la sesión
+  // 6. Guardar la cookie con una vigencia de 30 días usando maxAge
   response.cookie('accessToken', accessToken, {
-    expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días de duración persistente
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
+    sameSite: 'strict',
   });
 
   // 7. Responder con el rol y la URL de redirección

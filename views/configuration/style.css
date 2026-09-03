@@ -252,74 +252,71 @@ input:checked + .slider:before {
   transform: translateX(20px);
 }
 
-/* Contenedor del fondo oscuro semitransparente */
+/* Estilos para centrar y estilizar la alerta flotante */
 .custom-modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7); 
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 9999; /* Asegura que esté por encima de cualquier otro elemento */
+  justify-content: center;
+  z-index: 1000;
 }
 
-/* Caja principal de la alerta */
 .modal-content {
-  background-color: #111b21; /* Fondo oscuro inspirado en tu paleta */
-  color: #ffffff;
-  padding: 24px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  background-color: var(--bg-card, #111b21);
+  border: 1px solid var(--border-color, #222d34);
+  border-radius: 1rem;
+  padding: 2rem;
   width: 90%;
-  max-width: 320px;
-  font-family: inherit;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .modal-message {
+  color: var(--text-main, #e9edef);
   font-size: 1.1rem;
-  margin-bottom: 24px;
-  line-height: 1.4;
+  margin-bottom: 1.5rem;
 }
 
-/* Contenedor de los botones */
 .modal-buttons {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 1rem;
+  justify-content: center;
 }
 
-/* Estilos base para ambos botones */
-.btn-cancel, .btn-confirm {
-  flex: 1;
-  padding: 10px 0;
-  border-radius: 8px;
-  font-weight: bold;
+.modal-buttons button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
   cursor: pointer;
-  border: none;
-  transition: opacity 0.2s;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.btn-cancel:active, .btn-confirm:active {
-  opacity: 0.7;
-}
-
-/* Botón Cancelar (Borde transparente con acento verde) */
 .btn-cancel {
   background-color: transparent;
-  color: #00a884;
-  border: 1px solid #00a884;
+  border: 1px solid var(--accent-green, #00a884);
+  color: var(--accent-green, #00a884);
 }
 
-/* Botón Aceptar (Fondo verde esmeralda) */
+.btn-cancel:hover {
+  background-color: rgba(0, 168, 132, 0.1);
+}
+
 .btn-confirm {
-  background-color: #00a884;
-  color: #111b21;
+  background-color: var(--accent-green, #00a884);
+  border: none;
+  color: #fff;
 }
 
+.btn-confirm:hover {
+  opacity: 0.9;
+}
 /* ==========================================
    FORZAR MODO CLARO EN TODAS LAS VISTAS
    ========================================== */
