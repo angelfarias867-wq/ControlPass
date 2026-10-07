@@ -275,6 +275,13 @@ busesRouter.post("/", upload.single('foto'), async (req, res) => {
     });
 
     const savedBus = await newBus.save();
+
+    // --- TIEMPO REAL: Avisar a todos los clientes ---
+    if (req.io) {
+      req.io.emit('newBusCreated', savedBus);
+    }
+    // ----------------------------------------------
+
     return res.status(201).json(savedBus);
 
   } catch (error) {
@@ -296,8 +303,14 @@ busesRouter.delete("/:id", async (req, res) => {
       return res.status(404).json({ error: "Bus no encontrado" });
     }
 
-    // --- QUITAMOS EL BLOQUEO DE COMPARACIÓN IGUAL QUE EN EL PUT ---
     await Bus.findByIdAndDelete(req.params.id);
+
+    // --- TIEMPO REAL: Avisar a todos que el bus fue eliminado ---
+    if (req.io) {
+      req.io.emit('busDeleted', req.params.id);
+    }
+    // -----------------------------------------------------------
+
     return res.sendStatus(204);
   } catch (error) {
     return res.status(500).json({ error: "Error al eliminar el bus" });
@@ -318,9 +331,6 @@ busesRouter.put('/:id', upload.single('foto'), async (req, res) => {
     if (!bus) {
       return res.status(404).json({ error: 'El bus no existe en la base de datos' });
     }
-
-    // --- QUITAMOS EL BLOQUEO DE COMPARACIÓN DE NOMBRES AQUÍ ---
-    // Como ya validamos en el frontend que eres tú, dejamos pasar la edición libremente:
 
     const {
       numeroBus,
@@ -351,11 +361,17 @@ busesRouter.put('/:id', upload.single('foto'), async (req, res) => {
     }
 
     const busActualizado = await Bus.findByIdAndUpdate(id, datosActualizados, { new: true, runValidators: true });
+
+    // --- TIEMPO REAL: Avisar a todos que el bus fue actualizado ---
+    if (req.io) {
+      req.io.emit('busUpdated', busActualizado);
+    }
+    // -------------------------------------------------------------
+
     return res.status(200).json(busActualizado);
   } catch (error) {
     console.error("Error al actualizar el bus:", error);
     return res.status(500).json({ error: 'Error al actualizar el bus' });
   }
 });
-
 module.exports = busesRouter;

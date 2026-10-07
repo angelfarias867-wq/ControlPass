@@ -29,7 +29,6 @@ async function loadPendingUsers() {
     <div class="user-info">
       <div class="user-details">
         <span class="user-name">${user.name}</span>
-        <span class="user-role">${user.email}</span>
       </div>
     </div>
     <div class="action-buttons">

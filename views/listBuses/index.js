@@ -6,6 +6,11 @@ const searchInput = document.getElementById('bus-search-input');
 const userAvatar = document.querySelector('#user-avatar');
 
 import { createConfirmation } from '../components/alerts.js';
+// 1. Importamos el cliente de Socket.io desde el CDN oficial
+import { io } from "https://cdn.socket.io/4.7.2/socket.io.esm.min.js";
+
+// Inicializamos la conexión de Socket.io con el servidor
+const socket = io();
 
 // Variable global para almacenar el usuario activo
 let currentUser = null;
@@ -47,7 +52,6 @@ const optionspress = (cardElement, bus) => {
   let timer;
 
   const startPress = (e) => {
-    // Si no tiene permisos, se detiene inmediatamente y no muestra nada
     if (!canEditOrDelete(bus)) {
       console.log("Acción denegada: No eres el propietario de este bus.");
       return;
@@ -72,7 +76,6 @@ const optionspress = (cardElement, bus) => {
 
 // MOSTRAR MENÚ FLOTANTE DE OPCIONES (EDITAR / ELIMINAR)
 const mostrarOpcionesBus = (bus, cardElement) => {
-  // Doble seguridad por si acaso
   if (!canEditOrDelete(bus)) return;
 
   const existingMenu = document.querySelector('.bus-options-menu');
@@ -95,11 +98,8 @@ const mostrarOpcionesBus = (bus, cardElement) => {
     createConfirmation('¿Estás seguro de que deseas eliminar este bus?', async () => {
       try {
         await axios.delete(`/api/buses/${bus._id || bus.id}`, { withCredentials: true });
-        cardElement.remove();
-
-        if (busListContainer.querySelectorAll('.bus-card').length === 0) {
-          if (emptyState) emptyState.style.display = 'block';
-        }
+        // Nota: El backend emitirá 'busDeleted' y borrará la tarjeta en tiempo real para todos, 
+        // pero podemos removerla de inmediato aquí también o dejar que el socket lo maneje.
       } catch (error) {
         console.error('Error al eliminar el bus:', error);
         alert(error.response?.data?.error || 'No tienes permisos para realizar esta acción');
@@ -189,7 +189,6 @@ const createBusCard = (bus) => {
     </div>
   `;
 
-  // Evento para abrir la foto en grande al hacer clic
   if (bus.foto) {
     const imgThumbnail = article.querySelector('.bus-thumbnail');
     imgThumbnail.addEventListener('click', (e) => {
@@ -202,6 +201,40 @@ const createBusCard = (bus) => {
 
   return article;
 };
+
+// ==========================================
+// 2. ESCUCHADORES DE SOCKET.IO (TIEMPO REAL)
+// ==========================================
+
+// Cuando se crea un nuevo bus en cualquier otra sesión
+socket.on('newBusCreated', (bus) => {
+  if (emptyState) emptyState.style.display = 'none';
+
+  const busCard = createBusCard(bus);
+  busListContainer.append(busCard);
+});
+
+// Cuando se actualiza/edita un bus
+socket.on('busUpdated', (busActualizado) => {
+  const existingCard = document.getElementById(busActualizado._id || busActualizado.id);
+  if (existingCard) {
+    const newCard = createBusCard(busActualizado);
+    existingCard.replaceWith(newCard);
+  }
+});
+
+// Cuando se elimina un bus
+socket.on('busDeleted', (busId) => {
+  const existingCard = document.getElementById(busId);
+  if (existingCard) {
+    existingCard.remove();
+  }
+
+  // Si no quedan tarjetas, volvemos a mostrar el estado vacío
+  if (busListContainer.querySelectorAll('.bus-card').length === 0) {
+    if (emptyState) emptyState.style.display = 'block';
+  }
+});
 
 // CARGA INICIAL DE DATA Y USUARIO
 (async () => {
@@ -219,7 +252,6 @@ const createBusCard = (bus) => {
     if (buses.length > 0) {
       if (emptyState) emptyState.style.display = 'none';
 
-      // ORDENAMIENTO NUMÉRICO DE MENOR A MAYOR
       buses.sort((a, b) => Number(a.numeroBus) - Number(b.numeroBus));
 
       buses.forEach(bus => {

@@ -21,12 +21,40 @@ import { createNotification } from '../components/notifications.js';
 // Base de datos local idéntica a tus options del HTML
 const ubicacionesVenezuela = {
   "Carabobo": {
-    "Valencia": ["San José", "Naguanagua", "Miguel Peña", "Rafael Urdaneta"],
-    "Puerto Cabello": ["Bartolomé Salom", "Fraternidad", "Goigoaza"]
+    "Bejuma": ["Bejuma", "Canoabo", "Simón Bolívar"],
+    "Carlos Arvelo": ["Güigüe", "Tacarigua", "Belén"],
+    "Diego Ibarra": ["Mariara", "Aguas Calientes"],
+    "Guacara": ["Guacara", "Ciudad Alianza", "Yagua"],
+    "Juan José Mora": ["Morón", "Urama"],
+    "Libertador": ["Tocuyito", "Independencia"],
+    "Los Guayos": ["Los Guayos"],
+    "Miranda": ["Miranda"],
+    "Montalbán": ["Montalbán"],
+    "Naguanagua": ["Naguanagua"],
+    "Puerto Cabello": ["Bartolomé Salom", "Fraternidad", "Goigoaza", "Democracia", "Juan José Flores", "Patanemo", "Borburata"],
+    "San Diego": ["San Diego"],
+    "San Joaquín": ["San Joaquín"],
+    "Valencia": ["San José", "Naguanagua", "Miguel Peña", "Rafael Urdaneta", "Candelaria", "Catedral", "El Socorro", "San Blas"]
   },
   "Aragua": {
-    "Girardot": ["Maracay", "Pedro José Ovalles", "Joaquín Crespo"],
-    "Santiago Mariño": ["Turmero", "Arévalo Aponte"]
+    "Bolívar": ["San Mateo"],
+    "Camatagua": ["Camatagua", "Carmen de Cura"],
+    "Francisco Linares Alcántara": ["Santa Rita", "Francisco de Miranda", "Monseñor Feliciano González"],
+    "Girardot": ["Maracay", "Pedro José Ovalles", "Joaquín Crespo", "José Casanova Godoy", "Madre María de San José", "Andrés Eloy Blanco", "Los Tacarigua", "Las Delicias", "Choroní"],
+    "José Ángel Lamas": ["Santa Cruz de Aragua"],
+    "José Félix Ribas": ["La Victoria", "Castor Nieves Ríos", "Las Guacamayas", "Pao de Zárate", "Zuata"],
+    "José Rafael Revenga": ["El Consejo"],
+    "Libertador": ["Palo Negro", "San Martín de Porres"],
+    "Mario Briceño Iragorry": ["El Limón", "Caña de Azúcar"],
+    "Ocumare de la Costa de Oro": ["Ocumare de la Costa"],
+    "San Casimiro": ["San Casimiro", "Güiripa", "Ollas de Caramacate", "Valle Morín"],
+    "San Sebastián": ["San Sebastián de los Reyes"],
+    "Santiago Mariño": ["Turmero", "Arévalo Aponte", "Chuao", "Samán de Güere", "Alfredo Pacheco Miranda"],
+    "Santos Michelena": ["Las Tejerías", "Tiara"],
+    "Sucre": ["Cagua", "Bella Vista"],
+    "Tovar": ["Colonia Tovar"],
+    "Urdaneta": ["Barbacoas", "Las Peñitas", "San Francisco de Cara", "Taguay"],
+    "Zamora": ["Villa de Cura", "Magdaleno", "San Francisco de Asís", "Valles de Tucutunemo", "Augusto Mijares"]
   },
   "Miranda": {
     "Acevedo": ["Caucagua", "Araguita", "Arévalo González", "Capaya", "El Café", "Marizapa", "Panaquire", "Ribas"],
@@ -52,18 +80,49 @@ const ubicacionesVenezuela = {
     "Zamora": ["Guatire", "Bolívar"]
   },
   "Guárico": {
-    "Juan Germán Roscio": ["San Juan de los Morros", "Parapara"],
-    "Infante": ["Valle de la Pascua", "Espino"]
+    "Camaguán": ["Camaguán", "Puerto Miranda", "Uverito"],
+    "Chaguaramas": ["Chaguaramas"],
+    "El Socorro": ["El Socorro"],
+    "Francisco de Miranda": ["Calabozo", "El Calvario", "El Rastro", "Guardatinajas"],
+    "José Félix Ribas": ["Tucupido", "San Rafael de Laya"],
+    "José Tadeo Monagas": ["Altagracia de Orituco", "San Francisco de Macairita", "San Rafael de Orituco", "Paso Real de Macaira", "Lezama", "Sabana Grande de Orituco", "Tucupido"],
+    "Juan Germán Roscio": ["San Juan de los Morros", "Parapara", "Cantagallo"],
+    "Julián Mellado": ["El Sombrero", "Sosa"],
+    "Las Mercedes": ["Las Mercedes del Llano", "Cabruta", "Santa Rita de Manapire"],
+    "Leonardo Infante": ["Valle de la Pascua", "Espino"],
+    "Ortiz": ["Ortiz", "San Francisco de Tiznados", "San José de Tiznados", "Murucusa"],
+    "San Gerónimo de Guayabal": ["Guayabal", "Cazorla"],
+    "San José de Guaribe": ["San José de Guaribe", "Uveral"],
+    "Santa María de Ipire": ["Santa María de Ipire", "Altamira"],
+    "Zaraza": ["Zaraza", "San José de Unare"]
   },
   "Anzoátegui": {
-    "Simón Bolívar": ["Barcelona", "El Carmen", "San Cristóbal"],
-    "Juan Antonio Sotillo": ["Puerto La Cruz", "Pozuelos"]
+    "Anaco": ["Anaco", "San Joaquín"],
+    "Aragua": ["Aragua de Barcelona", "Cachipo"],
+    "Bolívar": ["Barcelona", "El Carmen", "San Cristóbal", "Bergantín", "Caigua", "El Pilar", "Naricual"],
+    "Bruzual": ["Clarines", "Guanape", "Sabana de Uchire"],
+    "Carvajal": ["Valle de Guanape", "Santa Bárbara"],
+    "Cajigal": ["Onoto", "San Pablo"],
+    "Díaz Monagas": ["Sabana de Uchire", "Mabres"],
+    "Freites": ["Cantaura", "Libertador", "Santa Rosa", "Urica"],
+    "Guanta": ["Guanta", "Chorrerón"],
+    "Independencia": ["Soledad", "Mamo"],
+    "Libertad": ["San Mateo", "El Carito", "Santa Inés"],
+    "McGregor": ["El Chaparro", "Tigre Hoyo"],
+    "Miranda": ["Pariaguán", "Atapirire", "El Pao", "La Misión"],
+    "Monagas": ["Mapire", "Piar", "San Diego de Cabrutica", "Santa Clara", "Uverito"],
+    "Peñalver": ["Puerto Píritu", "San Miguel", "Sucre"],
+    "Píritu": ["Píritu", "San José de Guaribe"],
+    "San Juan de Capistrano": ["Boca de Uchire", "Boca de Chávez"],
+    "Santa Ana": ["Santa Ana", "Pueblo Nuevo"],
+    "Simón Rodriguez": ["El Tigre", "Edmundo Barrios"],
+    "Sotillo": ["Puerto La Cruz", "Pozuelos"]
   },
   "Distrito Capital": {
     "Libertador": ["23 de Enero", "Altagracia", "Antímano", "Caricuao", "Catedral", "Coche", "El Junquito", "El Paraíso", "El Recreo", "El Valle", "La Candelaria", "La Pastora", "La Vega", "Macarao", "San Agustín", "San Bernardino", "San José", "San Juan", "Santa Rosalía", "Santa Teresa", "Sucre (Catia)"]
   },
   "La Guaira": {
-    "Vargas": ["La Guaira", "Maiquetía", "Catia La Mar", "Caraballeda", "Macuto"]
+    "Vargas": ["Catia La Mar", "Caraballeda", "Caruao", "Catia La Mar", "Chuspa", "El Junko", "La Guaira", "Macuto", "Maiquetía", "Naiguatá", "Carayaca"]
   }
 };
 
