@@ -263,7 +263,7 @@ busesRouter.post("/", upload.single('foto'), async (req, res) => {
     const newBus = new Bus({
       usuario: user.name || user.username,
       numeroBus: Number(numeroBus) || 0,
-      foto: req.file ? req.file.path : undefined,
+      foto: req.file ? req.file.path.replace(/\\/g, "/") : undefined, // <--- Normalización aplicada aquí
       entidad: entidad || "Entidad no especificada",
       nombreEntidad: nombreEntidad || "",
       lugarEntidad: lugarEntidad || parroquia || "",
@@ -357,7 +357,7 @@ busesRouter.put('/:id', upload.single('foto'), async (req, res) => {
     };
 
     if (req.file) {
-      datosActualizados.foto = req.file.path;
+      datosActualizados.foto = req.file.path.replace(/\\/g, "/"); // <--- Normalización aplicada aquí también
     }
 
     const busActualizado = await Bus.findByIdAndUpdate(id, datosActualizados, { new: true, runValidators: true });
@@ -374,4 +374,5 @@ busesRouter.put('/:id', upload.single('foto'), async (req, res) => {
     return res.status(500).json({ error: 'Error al actualizar el bus' });
   }
 });
+
 module.exports = busesRouter;
